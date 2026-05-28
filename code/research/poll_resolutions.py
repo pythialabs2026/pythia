@@ -113,6 +113,9 @@ def main(force_recheck_invalid: bool) -> int:
     print(f"endDate passed: {len(queue)}  ← polling")
 
     new_resolved = 0; new_invalid = 0; new_unresolved = 0
+    if not queue:
+        print("(nothing to poll — exiting without touching resolutions.jsonl)")
+        return 0
     with RES.open("a") as f:
         for r in queue:
             mid = str(r["id"])

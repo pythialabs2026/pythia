@@ -1,0 +1,46 @@
+{
+  "schema": "pythia.forward_paper_freeze.v0",
+  "frozen_at": "2026-05-28T17:30:00Z",
+  "track": "paper-only",
+  "signing": "NONE",
+  "model": "claude-opus-4-7",
+  "n_markets": 173,
+  "cohort": {
+    "path": "data/research/backtests/forward_paper_2026-05-28/cohort.jsonl",
+    "sha256": "081699fb656649afda71e8be7ddd7b699c94568893ff7d2a12aa9f707a0ab707",
+    "bytes": 62743
+  },
+  "predictions": {
+    "path": "data/research/backtests/forward_paper_2026-05-28/predictions.jsonl",
+    "sha256": "5490ba77f1e1c4a909e013dae2f60a1b8017a23ef472951bee7e201cc6a7d7c4",
+    "bytes": 66335
+  },
+  "cohort_meta": {
+    "path": "data/research/backtests/forward_paper_2026-05-28/cohort.meta.json",
+    "sha256": "4492678c53c307a24391e6336e2d16f5379ee9796fafc9570ebdcb6c52a9e03b",
+    "bytes": 492
+  },
+  "git_witness": {
+    "commit": "ba09e04c91220fe1ecf08445babe5d528cb4a937",
+    "remote": "git@github.com:pythialabs2026/pythia.git",
+    "branch": "main",
+    "pushed_at_utc": "2026-05-28T17:19:10Z",
+    "note": "Public GitHub commit timestamp = the witness that predictions existed before any market resolved (earliest endDate 2026-06-01)."
+  },
+  "anchoring_prevention": {
+    "rule": "market_p_yes_at_freeze NEVER shown to Opus during P(YES) generation",
+    "evidence": "code/research/forward_predict_helper.py cmd_prompt() — line 64 only emits id/endDate/question, intentionally omits market price"
+  },
+  "evaluation": {
+    "metric": "Brier = (p - y)^2",
+    "baselines": ["opus", "market_p_yes_at_freeze", "naive_0.5"],
+    "evaluator": "code/research/brier_evaluator.py",
+    "poller": "code/research/poll_resolutions.py",
+    "schedule": "cron daily 07:00 KST"
+  },
+  "promotion_gate": {
+    "condition": "After N>=50 resolutions, run debate --critique to decide whether paper-only track promotes to signed Pythia track (data/predictions/p_*.json + IPFS + Nostr Kind 1).",
+    "do_not_promote_silently": true
+  },
+  "note": "Any change to cohort.jsonl, predictions.jsonl, or cohort.meta.json after this freeze invalidates the experiment. verify_freeze.py checks integrity on every cron run."
+}
