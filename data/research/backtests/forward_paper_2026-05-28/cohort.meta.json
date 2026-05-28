@@ -1,0 +1,17 @@
+{
+  "schema": "pythia.forward_paper_cohort.v0",
+  "freeze_ts": "2026-05-28T17:05:27.232389Z",
+  "filter": {
+    "p_yes_range": [
+      0.3,
+      0.7
+    ],
+    "source": "data/raw/polymarket/forward_candidates.jsonl"
+  },
+  "n": 173,
+  "cohort_sha256": "081699fb656649afda71e8be7ddd7b699c94568893ff7d2a12aa9f707a0ab707",
+  "cohort_bytes": 62743,
+  "track": "paper-only",
+  "signing": "NONE",
+  "note": "173 forward markets frozen for fair-test Brier. NOT a Pythia signed prediction track."
+}
