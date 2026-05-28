@@ -1,0 +1,17 @@
+﻿# Pythia PC-side .gitignore
+data/raw_mirror/
+data/processed/
+data/features/
+data/models/
+data/backtest/
+data/llm_cache/
+logs/
+*.parquet
+*.pkl
+*.joblib
+*.duckdb
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ipynb_checkpoints/
