@@ -94,6 +94,36 @@
       "path": "data/research/backtests/cutoff_clean_2026-05-29/summary_v2.json",
       "sha256": "c20057ec77f8f9c44ae4dd575503c31a7d236f5b32d29c434c5ba018760f7798",
       "bytes": 4714
+    },
+    {
+      "label": "drop_sports_robustness_v3",
+      "path": "data/research/backtests/cutoff_clean_2026-05-29/drop_sports_robustness.json",
+      "sha256": "bdd15e9eb062ad8fdb0aa7f4fe98be55b3bf3fa1d6926c68efb1b69a59d7afe4",
+      "bytes": 3361
+    },
+    {
+      "label": "calibration_deepdive_v3",
+      "path": "data/research/backtests/cutoff_clean_2026-05-29/calibration_deepdive.json",
+      "sha256": "43607bb76d4725cc8fcdc9b18860970dfcafcc588ab4fa69d6f8a5c4b683d369",
+      "bytes": 7014
+    },
+    {
+      "label": "bin_aware_sizing_v3",
+      "path": "data/research/backtests/cutoff_clean_2026-05-29/bin_aware_sizing.json",
+      "sha256": "cccc9cc6be4b366698f3543e795eccd13a87adc16a00cadee6a68e698b340e5d",
+      "bytes": 3094
+    },
+    {
+      "label": "oos_forward_protocol_v3",
+      "path": "data/research/backtests/cutoff_clean_2026-05-29/oos_forward_protocol.md",
+      "sha256": "64105914d287d94ee1ced9dfa28655cbdd0ed8b00f103e51bce758cb1c2da384",
+      "bytes": 10068
+    },
+    {
+      "label": "summary_v3",
+      "path": "data/research/backtests/cutoff_clean_2026-05-29/summary_v3.json",
+      "sha256": "29f32ffa133611271445f0e35068b0f7dbdb084d6f168b09dd009fc402c33084",
+      "bytes": 4739
     }
   ],
   "git_witness": {
@@ -107,7 +137,8 @@
     "Knowledge-cutoff safety: closedTime >= 2026-02-01 buffers Opus 4.7 cutoff (January 2026).",
     "Track is paper-only research. Not IPFS pinned, not Nostr signed.",
     "Addendum 2026-05-29: predictions/baseline/brier/pnl/nav/summary/calibration sealed.",
-    "Addendum v2 2026-05-29: significance_test + leakage_stress + category_breakdown + kelly_sensitivity + summary_v2 sealed."
+    "Addendum v2 2026-05-29: significance_test + leakage_stress + category_breakdown + kelly_sensitivity + summary_v2 sealed.",
+    "Addendum v3 2026-05-29: drop_sports + calibration + bin_aware_sizing + oos_forward_protocol + summary_v3 sealed."
   ],
   "addendum_frozen_at_utc": "2026-05-29T04:02:40.635141Z",
   "git_witness_addendum": {
@@ -125,5 +156,6 @@
     "pushed_at_utc": "2026-05-29T04:14:25Z",
     "anchors": "significance_test + leakage_stress + category_breakdown + kelly_sensitivity + summary_v2",
     "diagnostic_pass_rate": "4/4"
-  }
+  },
+  "addendum_v3_frozen_at_utc": "2026-05-29T04:50:16.768321Z"
 }

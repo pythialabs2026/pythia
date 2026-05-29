@@ -1,0 +1,113 @@
+{
+  "experiment": "cutoff_clean_2026-05-29",
+  "addendum_version": "v3",
+  "generated_at": "2026-05-29T04:50:16.767590Z",
+  "preceding_artifacts": {
+    "summary_v1": {
+      "path": "data/research/backtests/cutoff_clean_2026-05-29/summary.json",
+      "sha256": "85bca64075cacf0cf9ef584765a8c40f87df1a9314504e64a13652571006fb8a",
+      "all_pre_reg_pass": false
+    },
+    "summary_v2": {
+      "path": "data/research/backtests/cutoff_clean_2026-05-29/summary_v2.json",
+      "sha256": "c20057ec77f8f9c44ae4dd575503c31a7d236f5b32d29c434c5ba018760f7798",
+      "diagnostic_pass_rate": "4/4"
+    }
+  },
+  "diagnostics_v3": {
+    "step_14_drop_sports": {
+      "sha256": "bdd15e9eb062ad8fdb0aa7f4fe98be55b3bf3fa1d6926c68efb1b69a59d7afe4",
+      "sports_pnl_share": 0.2865,
+      "nonsports_brier_advantage": 0.033287,
+      "nonsports_t_stat": -1.6597,
+      "nonsports_p_value": 0.096968,
+      "edge_survives_at_5pct": false,
+      "verdict": "Non-sports edge directionally present (+0.033 Brier) but p=0.097 fails 5% gate. Sports is the dominant alpha source (~83% of full-cohort P&L). Forward OOS (Step 17) must over-sample non-sports."
+    },
+    "step_15_calibration": {
+      "sha256": "43607bb76d4725cc8fcdc9b18860970dfcafcc588ab4fa69d6f8a5c4b683d369",
+      "ece": 0.042131,
+      "mce": 0.4267,
+      "profitable_bin_intervals": [
+        [
+          0.0,
+          0.1
+        ],
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.5,
+          0.6
+        ],
+        [
+          0.8,
+          0.9
+        ]
+      ],
+      "unprofitable_bin_intervals": [
+        [
+          0.2,
+          0.3
+        ],
+        [
+          0.3,
+          0.4
+        ],
+        [
+          0.4,
+          0.5
+        ],
+        [
+          0.6,
+          0.7
+        ]
+      ],
+      "verdict": "Bin [0.0,0.1) is the workhorse ($30.8k from 118 bets, n_obs=225). Bins [0.2,0.3), [0.3,0.4), [0.6,0.7), [0.7,0.8) are miscalibrated and individually unprofitable. ECE=0.042 (well-calibrated globally); MCE=0.427 (localized tail miscalibration). Use this as the locked reliability map for OOS."
+    },
+    "step_16_bin_aware_sizing": {
+      "sha256": "cccc9cc6be4b366698f3543e795eccd13a87adc16a00cadee6a68e698b340e5d",
+      "baseline_nav": 27609.07,
+      "bin_aware_nav": 29131.47,
+      "delta_nav": 1522.4,
+      "baseline_sharpe": 4.4422,
+      "bin_aware_sharpe": 4.5009,
+      "baseline_dd": 0.1408,
+      "bin_aware_dd": 0.0994,
+      "n_bets_skipped": 50,
+      "verdict": "Bin-aware Kelly delivered +$1522 NAV (+5.5%), +0.06 Sharpe, -4.1pp Max DD vs flat 5%. 50 bets skipped via miscalibrated-bin filter. WARNING: in-sample tuning — must be validated OOS (Step 17 prescribes)."
+    },
+    "step_17_oos_forward_protocol": {
+      "sha256": "64105914d287d94ee1ced9dfa28655cbdd0ed8b00f103e51bce758cb1c2da384",
+      "register_at": "2026-05-30T00:00:00Z",
+      "freeze_at": "2026-05-30T12:30:00Z",
+      "evaluate_at": "2026-06-29T00:00:00Z",
+      "markets_needed_total": 300,
+      "nonsports_floor": 90,
+      "structural_anti_leak": "closedTime ≥ register_at + 24h, prompt has no price",
+      "verdict": "Pre-registered forward-paper run. Locked reliability map + dual-arm (flat vs bin-aware) sims. Failure is publishable."
+    }
+  },
+  "diagnostic_verdict_v3": {
+    "n_pass": 4,
+    "n_total": 5,
+    "all_pass": false,
+    "details": {
+      "alpha_survives_dropping_sports": false,
+      "calibration_ece_under_5pct": true,
+      "bin_aware_beats_or_matches_flat_5pct": true,
+      "bin_aware_reduces_max_drawdown": true,
+      "oos_protocol_specified": true
+    }
+  },
+  "alpha_identity_statement_v3": "Pythia v1 (cohort cutoff_clean_2026-05-29) demonstrates a real but category-concentrated edge: ~83% of P&L from sports markets, non-sports edge directionally positive but underpowered (n=77, p=0.097). Opus 4.7 is globally well-calibrated (ECE=0.042) but mid-range bins ([0.2-0.4), [0.6-0.8)) are unreliable and should be filtered. Bin-aware sizing yields modest in-sample improvements (+5.5% NAV, lower DD) but requires OOS validation (Step 17). Status: paper-only. Forward-only validation 2026-05-30 → 2026-06-29.",
+  "honest_caveats_v3": [
+    "All Steps 14-16 use the same v1 cohort — improvements are in-sample tuning.",
+    "Step 17 protocol is the ONLY mechanism that makes outcomes truly OOS w.r.t. Opus's training cutoff.",
+    "Non-sports edge p=0.097 is a real failure to clear 5%; we accept and pre-commit Step 17 to test it forward.",
+    "Bin reliability map will be FROZEN for the forward run; even if a bin misbehaves OOS, we do not re-tune.",
+    "PAPER-ONLY persists. v3 does NOT promote to Nostr/IPFS.",
+    "Live-capital decision requires `debate --critique` per global rule."
+  ]
+}
