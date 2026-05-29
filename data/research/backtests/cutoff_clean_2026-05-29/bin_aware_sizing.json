@@ -1,0 +1,127 @@
+{
+  "experiment": "cutoff_clean_2026-05-29",
+  "analysis": "bin_aware_sizing",
+  "generated_at": "2026-05-29T04:47:57.671750Z",
+  "reliability_policy": {
+    "min_bin_n": 10,
+    "well_calibrated_factor": 1.0,
+    "moderately_calibrated_factor": 0.5,
+    "miscalibrated_factor": 0.0,
+    "factor_map_by_bin": {
+      "0": 1.0,
+      "1": 1.0,
+      "2": 0.0,
+      "3": 0.0,
+      "4": 1.0,
+      "5": 1.0,
+      "6": 0.0,
+      "7": 0.0,
+      "8": 0.0,
+      "9": 0.0
+    }
+  },
+  "sim_params": {
+    "bankroll_0": 1000.0,
+    "edge_min": 0.05,
+    "stake_cap": 0.05,
+    "fee": 0.02,
+    "slippage": 0.01
+  },
+  "baseline_flat_5pct": {
+    "n_bets_taken": 231,
+    "n_winners": 175,
+    "win_rate": 0.7576,
+    "n_filtered_by_reliability": 0,
+    "total_stake": 116217.93,
+    "total_net_pnl": 26609.07,
+    "final_nav": 27609.07,
+    "roi": 26.609071,
+    "sharpe_daily": 4.4422,
+    "max_drawdown": 0.1408,
+    "bin_contributions": {
+      "0": {
+        "n_bets": 118,
+        "net_pnl": 30806.19
+      },
+      "1": {
+        "n_bets": 30,
+        "net_pnl": 4204.61
+      },
+      "2": {
+        "n_bets": 19,
+        "net_pnl": -2107.53
+      },
+      "3": {
+        "n_bets": 12,
+        "net_pnl": -2628.66
+      },
+      "4": {
+        "n_bets": 13,
+        "net_pnl": -678.19
+      },
+      "5": {
+        "n_bets": 20,
+        "net_pnl": 1235.93
+      },
+      "6": {
+        "n_bets": 7,
+        "net_pnl": -4363.29
+      },
+      "7": {
+        "n_bets": 2,
+        "net_pnl": -11.14
+      },
+      "8": {
+        "n_bets": 8,
+        "net_pnl": 39.3
+      },
+      "9": {
+        "n_bets": 2,
+        "net_pnl": 111.85
+      }
+    }
+  },
+  "bin_aware": {
+    "n_bets_taken": 181,
+    "n_winners": 151,
+    "win_rate": 0.8343,
+    "n_filtered_by_reliability": 50,
+    "total_stake": 80845.27,
+    "total_net_pnl": 28131.47,
+    "final_nav": 29131.47,
+    "roi": 28.131468,
+    "sharpe_daily": 4.5009,
+    "max_drawdown": 0.0994,
+    "bin_contributions": {
+      "0": {
+        "n_bets": 118,
+        "net_pnl": 22915.11
+      },
+      "1": {
+        "n_bets": 30,
+        "net_pnl": 3623.37
+      },
+      "4": {
+        "n_bets": 13,
+        "net_pnl": -679.33
+      },
+      "5": {
+        "n_bets": 20,
+        "net_pnl": 2272.32
+      }
+    }
+  },
+  "delta_bin_aware_minus_baseline": {
+    "delta_final_nav": 1522.4,
+    "delta_sharpe": 0.0587,
+    "delta_max_drawdown": -0.0414,
+    "n_skipped_due_to_low_reliability": 50
+  },
+  "interpretation": "Bin-aware: NAV $29131.47 vs flat 5% NAV $27609.07 (Δ +1522.40). Sharpe 4.5009 vs 4.4422 (Δ 0.058699999999999974). Max DD 0.0994 vs 0.1408 (Δ -0.0414). Filtered 50 bets due to miscalibrated bins.",
+  "caveats": [
+    "Reliability factors come from THE SAME COHORT we're sizing on — this is in-sample tuning, not OOS validation.",
+    "True bin-aware sizing requires Out-of-Sample calibration (Step 17 protocol).",
+    "Small-bin reliability is unstable; MIN_BIN_N=10 prunes bins with <10 obs to factor 0.",
+    "Skipped bets may have been profitable individually; we're trading expected value for variance control."
+  ]
+}
