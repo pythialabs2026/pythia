@@ -1,0 +1,113 @@
+{
+  "experiment": "cutoff_clean_2026-05-29",
+  "analysis": "drop_sports_robustness",
+  "generated_at": "2026-05-29T04:43:43.351184Z",
+  "sim_params": {
+    "bankroll_0": 1000.0,
+    "edge_threshold": 0.05,
+    "stake_cap": 0.05,
+    "fee": 0.02,
+    "slippage": 0.01
+  },
+  "brier_blocks": {
+    "full": {
+      "n_total": 390,
+      "n_paired": 299,
+      "brier_opus_all": 0.100377,
+      "brier_naive_all": 0.25,
+      "brier_opus_paired": 0.108483,
+      "brier_market_paired": 0.150072,
+      "opus_win_rate": 0.7324,
+      "mean_loss_diff": -0.041589,
+      "stdev_loss_diff": 0.170191,
+      "t_statistic": -4.2255,
+      "p_two_sided_normal": 2.4e-05,
+      "ci_95_loss_diff": [
+        -0.06088,
+        -0.022298
+      ]
+    },
+    "nonsports": {
+      "n_total": 91,
+      "n_paired": 77,
+      "brier_opus_all": 0.12466,
+      "brier_naive_all": 0.25,
+      "brier_opus_paired": 0.128853,
+      "brier_market_paired": 0.16214,
+      "opus_win_rate": 0.7273,
+      "mean_loss_diff": -0.033286,
+      "stdev_loss_diff": 0.175984,
+      "t_statistic": -1.6597,
+      "p_two_sided_normal": 0.096968,
+      "ci_95_loss_diff": [
+        -0.072594,
+        0.006022
+      ]
+    },
+    "sports_only": {
+      "n_total": 299,
+      "n_paired": 222,
+      "brier_opus_all": 0.092987,
+      "brier_naive_all": 0.25,
+      "brier_opus_paired": 0.101418,
+      "brier_market_paired": 0.145886,
+      "opus_win_rate": 0.7342,
+      "mean_loss_diff": -0.044469,
+      "stdev_loss_diff": 0.168446,
+      "t_statistic": -3.9334,
+      "p_two_sided_normal": 8.4e-05,
+      "ci_95_loss_diff": [
+        -0.066627,
+        -0.02231
+      ]
+    }
+  },
+  "pnl_blocks": {
+    "full": {
+      "n_bets": 231,
+      "n_winners": 175,
+      "win_rate": 0.7576,
+      "total_stake": 116217.93,
+      "total_net_pnl": 26609.07,
+      "final_nav": 27609.07,
+      "roi": 26.609071,
+      "sharpe_daily": 4.4422,
+      "max_drawdown": 0.1408
+    },
+    "nonsports": {
+      "n_bets": 53,
+      "n_winners": 38,
+      "win_rate": 0.717,
+      "total_stake": 5105.62,
+      "total_net_pnl": 2201.84,
+      "final_nav": 3201.84,
+      "roi": 2.201838,
+      "sharpe_daily": 8.3834,
+      "max_drawdown": 0.0994
+    },
+    "sports_only": {
+      "n_bets": 178,
+      "n_winners": 137,
+      "win_rate": 0.7697,
+      "total_stake": 35272.23,
+      "total_net_pnl": 7622.88,
+      "final_nav": 8622.88,
+      "roi": 7.622882,
+      "sharpe_daily": 3.5559,
+      "max_drawdown": 0.2262
+    }
+  },
+  "robustness_check": {
+    "sports_pnl_share": 0.2865,
+    "full_brier_advantage": 0.041589,
+    "nonsports_brier_advantage": 0.033287,
+    "edge_survives_dropping_sports": false,
+    "interpretation": "Excluding sports markets: n_paired=77, Δ(market-opus) Brier=+0.0333, P&L=$2201.84, t=-1.6597, p=0.096968. Alpha does NOT survive — strategy is essentially sports-only."
+  },
+  "caveats": [
+    "Drop-1 is the harshest robustness test for category concentration — passing it is strong evidence of generalist edge; failing means the headline numbers come almost entirely from sports.",
+    "Even if non-sports survives, sample size shrinks (sports was the largest category) → statistical power drops.",
+    "Bet count also drops — non-sports bets may have been fewer per-market than sports.",
+    "Sharpe on a tiny NAV curve is noisy; treat sub-cohort Sharpe with caution."
+  ]
+}
