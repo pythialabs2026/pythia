@@ -85,13 +85,20 @@
       "bytes": 10241
     }
   ],
-  "git_witness_oos_forward_v1": null,
+  "git_witness_oos_forward_v1": {
+    "commit": "37aba7a578e87548de835a5534e053e0b489afe7",
+    "branch": "main",
+    "remote": "git@github.com:pythialabs2026/pythia.git",
+    "pushed_at_utc": "2026-05-29T07:36:25Z",
+    "anchors": "cohort + cohort_meta + baseline_prices + predictions + oos_forward_protocol + amendment_v1 + amendment_v2"
+  },
   "notes": [
     "OOS forward-paper experiment. Outcomes UNKNOWN at freeze — predictions.jsonl sealed before any y is observable.",
     "Predictor model = claude-opus-4-8 (amendment v1, sha 8cbf4c996ead469d…). Sealed protocol doc names 4.7 but is unedited; the swap is recorded in the amendment, leakage-safe because future-resolving markets are post-cutoff for any current model.",
     "Anti-leakage: cohort.jsonl exposes only id/close-date/question; price sealed separately in baseline_prices.jsonl.",
     "closedTime invariant enforced at freeze against scheduled endDate; realized closedTime re-asserted at evaluate_at (2026-06-29).",
     "Track is paper-only. Pinata/IPFS upload is GATED on a PASS verdict at evaluate_at AND a debate --critique gate (§6) — NOT done at freeze.",
-    "NO re-prompt permitted T2→T3: predictions.jsonl must show exactly one modifying commit in git history (§3 invariant 4)."
+    "NO re-prompt permitted T2→T3: predictions.jsonl must show exactly one modifying commit in git history (§3 invariant 4).",
+    "git_witness_oos_forward_v1 anchored at commit 37aba7a578e87548de835a5534e053e0b489afe7 (2026-05-29T07:36:25Z)."
   ]
 }
