@@ -1,0 +1,38 @@
+{
+  "schema": "pythia.backtest_freeze.v1",
+  "track": "cutoff_clean_2026-05-29",
+  "experiment_kind": "backtest_paper_only",
+  "frozen_at_utc": "2026-05-29T03:32:52.159411Z",
+  "n_markets": 390,
+  "artifacts": [
+    {
+      "label": "cohort",
+      "path": "data/research/backtests/cutoff_clean_2026-05-29/cohort.jsonl",
+      "sha256": "7f4aa996224108e932b714e5f084d7ddc55063b05d69efd63aaea33ffc7e8120",
+      "bytes": 128673
+    },
+    {
+      "label": "cohort_meta",
+      "path": "data/research/backtests/cutoff_clean_2026-05-29/cohort_meta.json",
+      "sha256": "060da31b2ba7375eace408a4bf641a22e43975a960755d3143843faca7bfe22f",
+      "bytes": 1326
+    },
+    {
+      "label": "methodology.md",
+      "path": "data/research/backtests/cutoff_clean_2026-05-29/methodology.md",
+      "sha256": "0e8096272614db16b78afa17b7af399f31b4fd0d4f4fb20c55a8430510924c03",
+      "bytes": 7576
+    }
+  ],
+  "git_witness": {
+    "commit": "PENDING",
+    "branch": "main",
+    "remote": "git@github.com:pythialabs2026/pythia.git",
+    "pushed_at_utc": "PENDING"
+  },
+  "notes": [
+    "predictions.jsonl + baseline_prices.jsonl + summary.json artifacts will be added in addendum freeze block after Opus prediction step.",
+    "Knowledge-cutoff safety: closedTime >= 2026-02-01 buffers Opus 4.7 cutoff (January 2026).",
+    "Track is paper-only research. Not IPFS pinned, not Nostr signed."
+  ]
+}

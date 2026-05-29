@@ -1,0 +1,46 @@
+{
+  "schema": "pythia.cutoff_clean_cohort.v0",
+  "track": "paper-only",
+  "harvested_at_utc": "2026-05-29T03:30:21.772233Z",
+  "filter": {
+    "source": "Polymarket Gamma API /markets",
+    "createdAt_max_exclusive": "2026-01-01T00:00:00Z",
+    "closedTime_min_inclusive": "2026-02-01T00:00:00Z",
+    "closedTime_max_inclusive": "2026-05-29T23:59:59Z",
+    "outcomes_required": [
+      "Yes",
+      "No"
+    ],
+    "resolution_required": [
+      "[1,0]",
+      "[0,1]"
+    ],
+    "volume_filter": "none (natural distribution)"
+  },
+  "knowledge_cutoff_safety": {
+    "model": "claude-opus-4-7",
+    "model_knowledge_cutoff": "2026-01",
+    "rationale": "closedTime >= 2026-02-01 ensures resolution event postdates Opus's training data window. createdAt < 2026-01-01 ensures market existed before Opus cutoff so question itself is plausibly known."
+  },
+  "n_markets": 390,
+  "resolution_distribution": {
+    "y_eq_1": 64,
+    "y_eq_0": 326,
+    "y_eq_1_rate": 0.1641
+  },
+  "closedTime_monthly_counts": {
+    "2026-02": 93,
+    "2026-03": 60,
+    "2026-04": 129,
+    "2026-05": 108
+  },
+  "volume_quantiles_usd": {
+    "p25": 1965.31,
+    "p50": 11270.79,
+    "p75": 74580.86,
+    "p90": 205256.84,
+    "max": 17877969.46
+  },
+  "sha256": "7f4aa996224108e932b714e5f084d7ddc55063b05d69efd63aaea33ffc7e8120",
+  "bytes": 128673
+}
