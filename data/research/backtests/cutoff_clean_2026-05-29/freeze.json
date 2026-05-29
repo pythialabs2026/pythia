@@ -117,5 +117,13 @@
     "pushed_at_utc": "2026-05-29T04:03:13Z",
     "anchors": "predictions + baseline + brier + pnl + nav + summary + calibration"
   },
-  "addendum_v2_frozen_at_utc": "2026-05-29T04:13:46.023539Z"
+  "addendum_v2_frozen_at_utc": "2026-05-29T04:13:46.023539Z",
+  "git_witness_v2": {
+    "commit": "0f7e353",
+    "branch": "main",
+    "remote": "git@github.com:pythialabs2026/pythia.git",
+    "pushed_at_utc": "2026-05-29T04:14:25Z",
+    "anchors": "significance_test + leakage_stress + category_breakdown + kelly_sensitivity + summary_v2",
+    "diagnostic_pass_rate": "4/4"
+  }
 }
