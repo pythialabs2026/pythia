@@ -1,0 +1,298 @@
+{
+  "experiment": "cutoff_clean_2026-05-29",
+  "analysis": "leakage_curve_sensitivity",
+  "depends_on": "Step 19 leakage_curve.json",
+  "generated_at": "2026-05-29T05:16:55.080937Z",
+  "window_sizes_tested": [
+    7,
+    14,
+    21
+  ],
+  "per_window_size": {
+    "7": {
+      "window_days": 7,
+      "stride_days": 7,
+      "windows": [
+        {
+          "window_start": "2026-02-01",
+          "n_paired": 28,
+          "brier_opus_paired": 0.130314,
+          "brier_market_paired": 0.198334,
+          "delta_opus_minus_market": -0.068019
+        },
+        {
+          "window_start": "2026-02-08",
+          "n_paired": 17,
+          "brier_opus_paired": 0.020624,
+          "brier_market_paired": 0.028661,
+          "delta_opus_minus_market": -0.008038
+        },
+        {
+          "window_start": "2026-02-15",
+          "n_paired": 14,
+          "brier_opus_paired": 0.109143,
+          "brier_market_paired": 0.182125,
+          "delta_opus_minus_market": -0.072982
+        },
+        {
+          "window_start": "2026-03-08",
+          "n_paired": 6,
+          "brier_opus_paired": 0.003267,
+          "brier_market_paired": 0.079796,
+          "delta_opus_minus_market": -0.076529
+        },
+        {
+          "window_start": "2026-03-15",
+          "n_paired": 24,
+          "brier_opus_paired": 0.079608,
+          "brier_market_paired": 0.092568,
+          "delta_opus_minus_market": -0.01296
+        },
+        {
+          "window_start": "2026-03-22",
+          "n_paired": 13,
+          "brier_opus_paired": 0.141723,
+          "brier_market_paired": 0.163448,
+          "delta_opus_minus_market": -0.021725
+        },
+        {
+          "window_start": "2026-03-29",
+          "n_paired": 18,
+          "brier_opus_paired": 0.110217,
+          "brier_market_paired": 0.081896,
+          "delta_opus_minus_market": 0.028321
+        },
+        {
+          "window_start": "2026-04-05",
+          "n_paired": 16,
+          "brier_opus_paired": 0.177119,
+          "brier_market_paired": 0.186692,
+          "delta_opus_minus_market": -0.009573
+        },
+        {
+          "window_start": "2026-04-12",
+          "n_paired": 23,
+          "brier_opus_paired": 0.190291,
+          "brier_market_paired": 0.202752,
+          "delta_opus_minus_market": -0.012461
+        },
+        {
+          "window_start": "2026-04-19",
+          "n_paired": 52,
+          "brier_opus_paired": 0.084106,
+          "brier_market_paired": 0.225486,
+          "delta_opus_minus_market": -0.14138
+        },
+        {
+          "window_start": "2026-04-26",
+          "n_paired": 8,
+          "brier_opus_paired": 0.107313,
+          "brier_market_paired": 0.182125,
+          "delta_opus_minus_market": -0.074813
+        },
+        {
+          "window_start": "2026-05-03",
+          "n_paired": 42,
+          "brier_opus_paired": 0.10191,
+          "brier_market_paired": 0.098002,
+          "delta_opus_minus_market": 0.003908
+        },
+        {
+          "window_start": "2026-05-17",
+          "n_paired": 10,
+          "brier_opus_paired": 0.01575,
+          "brier_market_paired": 0.060965,
+          "delta_opus_minus_market": -0.045215
+        },
+        {
+          "window_start": "2026-05-24",
+          "n_paired": 21,
+          "brier_opus_paired": 0.119195,
+          "brier_market_paired": 0.131444,
+          "delta_opus_minus_market": -0.012249
+        }
+      ],
+      "verdict_block": {
+        "n_windows": 14,
+        "deltas": [
+          -0.10969,
+          0.088519,
+          -0.105876,
+          0.076341,
+          0.062115,
+          -0.031506,
+          0.066902,
+          0.013172,
+          -0.106185,
+          0.023207,
+          -0.005403,
+          -0.08616,
+          0.103445
+        ],
+        "n_sign_flips": 9,
+        "max_abs_jump": 0.10969,
+        "verdict": "non_monotone"
+      }
+    },
+    "14": {
+      "window_days": 14,
+      "stride_days": 14,
+      "windows": [
+        {
+          "window_start": "2026-02-01",
+          "n_paired": 45,
+          "brier_opus_paired": 0.088876,
+          "brier_market_paired": 0.134235,
+          "delta_opus_minus_market": -0.04536
+        },
+        {
+          "window_start": "2026-02-15",
+          "n_paired": 17,
+          "brier_opus_paired": 0.116594,
+          "brier_market_paired": 0.170983,
+          "delta_opus_minus_market": -0.054389
+        },
+        {
+          "window_start": "2026-03-01",
+          "n_paired": 6,
+          "brier_opus_paired": 0.003267,
+          "brier_market_paired": 0.079796,
+          "delta_opus_minus_market": -0.076529
+        },
+        {
+          "window_start": "2026-03-15",
+          "n_paired": 37,
+          "brier_opus_paired": 0.101432,
+          "brier_market_paired": 0.117472,
+          "delta_opus_minus_market": -0.016039
+        },
+        {
+          "window_start": "2026-03-29",
+          "n_paired": 34,
+          "brier_opus_paired": 0.1417,
+          "brier_market_paired": 0.131212,
+          "delta_opus_minus_market": 0.010488
+        },
+        {
+          "window_start": "2026-04-12",
+          "n_paired": 75,
+          "brier_opus_paired": 0.116669,
+          "brier_market_paired": 0.218514,
+          "delta_opus_minus_market": -0.101845
+        },
+        {
+          "window_start": "2026-04-26",
+          "n_paired": 50,
+          "brier_opus_paired": 0.102774,
+          "brier_market_paired": 0.111462,
+          "delta_opus_minus_market": -0.008688
+        },
+        {
+          "window_start": "2026-05-10",
+          "n_paired": 14,
+          "brier_opus_paired": 0.105179,
+          "brier_market_paired": 0.136845,
+          "delta_opus_minus_market": -0.031666
+        },
+        {
+          "window_start": "2026-05-24",
+          "n_paired": 21,
+          "brier_opus_paired": 0.119195,
+          "brier_market_paired": 0.131444,
+          "delta_opus_minus_market": -0.012249
+        }
+      ],
+      "verdict_block": {
+        "n_windows": 9,
+        "deltas": [
+          0.027718,
+          -0.113327,
+          0.098165,
+          0.040268,
+          -0.025031,
+          -0.013895,
+          0.002405,
+          0.014016
+        ],
+        "n_sign_flips": 4,
+        "max_abs_jump": 0.113327,
+        "verdict": "non_monotone"
+      }
+    },
+    "21": {
+      "window_days": 21,
+      "stride_days": 21,
+      "windows": [
+        {
+          "window_start": "2026-02-01",
+          "n_paired": 59,
+          "brier_opus_paired": 0.093685,
+          "brier_market_paired": 0.145599,
+          "delta_opus_minus_market": -0.051914
+        },
+        {
+          "window_start": "2026-02-22",
+          "n_paired": 9,
+          "brier_opus_paired": 0.052633,
+          "brier_market_paired": 0.092859,
+          "delta_opus_minus_market": -0.040226
+        },
+        {
+          "window_start": "2026-03-15",
+          "n_paired": 55,
+          "brier_opus_paired": 0.104307,
+          "brier_market_paired": 0.105829,
+          "delta_opus_minus_market": -0.001522
+        },
+        {
+          "window_start": "2026-04-05",
+          "n_paired": 91,
+          "brier_opus_paired": 0.127298,
+          "brier_market_paired": 0.212919,
+          "delta_opus_minus_market": -0.085621
+        },
+        {
+          "window_start": "2026-04-26",
+          "n_paired": 54,
+          "brier_opus_paired": 0.119513,
+          "brier_market_paired": 0.127394,
+          "delta_opus_minus_market": -0.007881
+        },
+        {
+          "window_start": "2026-05-17",
+          "n_paired": 31,
+          "brier_opus_paired": 0.085826,
+          "brier_market_paired": 0.108709,
+          "delta_opus_minus_market": -0.022883
+        }
+      ],
+      "verdict_block": {
+        "n_windows": 6,
+        "deltas": [
+          -0.041052,
+          0.051674,
+          0.022991,
+          -0.007785,
+          -0.033687
+        ],
+        "n_sign_flips": 2,
+        "max_abs_jump": 0.051674,
+        "verdict": "non_monotone"
+      }
+    }
+  },
+  "verdicts_summary": {
+    "7": "non_monotone",
+    "14": "non_monotone",
+    "21": "non_monotone"
+  },
+  "n_non_monotone_of_3": 3,
+  "finding_robust": true,
+  "interpretation": "Non-monotone pattern holds at 3/3 window sizes — Step 19's finding is NOT a 14d artifact. Opus Brier degradation over time is genuinely cluster-driven, not a smooth cutoff-leakage gradient.",
+  "caveats": [
+    "Stride = window_size (non-overlapping). Reduces redundant evidence vs Step 19's overlapping windows.",
+    "Min n_paired per window = 5 — small windows may be omitted entirely.",
+    "Brier is noisy at low n; 7d windows may legitimately appear monotone just from variance reduction.",
+    "Even if robust, non-monotone ≠ no-leakage. Step 17 forward protocol remains the only true elimination."
+  ]
+}
