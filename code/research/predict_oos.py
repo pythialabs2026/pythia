@@ -43,10 +43,16 @@ MODEL_ID = "claude-opus-4-8"
 EXPERIMENT = "oos_forward_2026-05-30"
 BATCH_SIZE_DEFAULT = 30
 
-# Any "0.<digit>" in the rendered prompt would be a price/probability leak.
-# Dates are rendered as YYYY-MM-DD (no "0." float), questions are free text;
-# a "0." token therefore almost certainly means a stray price slipped in.
+# A stray "0.<digit>" in the MACHINE-BUILT prefix (id=…  close=YYYY-MM-DD) would
+# mean a price/probability field leaked into the render. The question text is
+# sanctioned input under §3.2 and may legitimately carry a decimal (e.g. inflation
+# "0.5%", "Core CPI MoM -0.3%"), so the guard scans the prefix only — never the
+# question. The render template (`_render_rows`) has no price field, so this is a
+# belt-and-suspenders check against a future malformed render, not the primary
+# guarantee. The invariant itself (model sees only id/close/question, never
+# price/volume/outcome) is unchanged.
 _PRICE_LEAK_RE = re.compile(r"\b0\.\d")
+_QUESTION_MARKER = "  Q: "
 
 PROMPT_HEADER = """You are a calibrated forecaster. For EACH market below output a
 probability p_yes ∈ [0.01, 0.99] that the market resolves YES, plus a one-sentence
@@ -91,11 +97,24 @@ def _render_prompt(rows: list[dict]) -> str:
     return PROMPT_HEADER + "\n" + _render_rows(rows)
 
 
+def _leak_scan_target(rows_text: str) -> str:
+    """The machine-built prefix of each rendered row, EXCLUDING the question.
+
+    Per §3.2 the question is sanctioned input and may legitimately contain a
+    decimal (inflation "0.5%", "Core CPI MoM -0.3%", odds-free thresholds). The
+    only place a stray price could surface is the id/close prefix, so we scan
+    just that. A line with no question marker (e.g. an injected `market_p=0.43`)
+    is scanned in full — exactly the malformed-render case we want to catch.
+    """
+    return "\n".join(line.split(_QUESTION_MARKER, 1)[0]
+                     for line in rows_text.splitlines())
+
+
 def _assert_no_leak(rows_text: str) -> None:
     """Run ONLY on the rendered market rows (see _render_rows)."""
-    hit = _PRICE_LEAK_RE.search(rows_text)
+    hit = _PRICE_LEAK_RE.search(_leak_scan_target(rows_text))
     if hit:
-        print(f"🚨 ABORT: market rows contain a price-like token {hit.group()!r} — "
+        print(f"🚨 ABORT: market-row prefix contains a price-like token {hit.group()!r} — "
               f"anti-leakage invariant (§3.2) violated.", file=sys.stderr)
         sys.exit(2)
 
@@ -178,13 +197,19 @@ def cmd_selftest() -> int:
         {"id": "1", "endDate": "2026-06-15T00:00:00Z", "question": "Will X happen?"},
     ])
     _assert_no_leak(clean_rows)  # must NOT exit
-    # Full prompt (header + rows) must still render without the header's
-    # legitimate "0.01/0.99" range tripping the guard — header is NOT scanned.
+    # A decimal INSIDE the question is sanctioned (§3.2) and must NOT trip the
+    # guard — this is the regression test for the CPI/inflation false positive.
+    decimal_q = _render_rows([
+        {"id": "2", "endDate": "2026-06-10T00:00:00Z",
+         "question": "Will monthly inflation increase by 0.5% in May?"},
+    ])
+    _assert_no_leak(decimal_q)  # must NOT exit
+    # A stray price field in the prefix (no question marker) must still be caught.
     leaky = clean_rows + "\n  market_p=0.43"
-    if _PRICE_LEAK_RE.search(leaky) is None:
+    if _PRICE_LEAK_RE.search(_leak_scan_target(leaky)) is None:
         print("🚨 selftest FAIL: guard did not catch injected price", file=sys.stderr)
         return 1
-    print("✅ selftest pass: clean market rows clear (header range ignored), "
+    print("✅ selftest pass: clean rows + decimal-in-question clear, "
           "injected price is caught")
     return 0
 

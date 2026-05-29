@@ -1,0 +1,80 @@
+{
+  "schema": "pythia.oos_forward_cohort.v1",
+  "track": "paper-only",
+  "experiment": "oos_forward_2026-05-30",
+  "pre_registered_protocol_sha256": "64105914d287d94ee1ced9dfa28655cbdd0ed8b00f103e51bce758cb1c2da384",
+  "register_at_utc": "2026-05-29T07:00:00Z",
+  "harvested_at_utc": "2026-05-29T07:15:11.579126Z",
+  "filter": {
+    "source": "Polymarket Gamma API /markets?closed=false&active=true",
+    "scheduled_close_min_inclusive": "2026-05-30T07:00:00Z",
+    "scheduled_close_max_inclusive": "2026-06-28T07:00:00Z",
+    "outcomes_required": [
+      "Yes",
+      "No"
+    ],
+    "market_p_at_register_range": [
+      0.01,
+      0.99
+    ]
+  },
+  "field_mapping": {
+    "scheduled_close": "endDate",
+    "note": "Open markets carry no closedTime until resolution. The §3 invariant closedTime >= register_at + 24h is enforced here against endDate (scheduled close); the true closedTime is re-asserted at evaluate_at by evaluate_oos.py."
+  },
+  "anti_leakage": {
+    "cohort_contains_price": false,
+    "cohort_contains_token": false,
+    "baseline_sealed_separately": true
+  },
+  "raw_open_markets_scanned": 10100,
+  "rejections": {
+    "not_binary": 1077,
+    "no_price": 0,
+    "p_out_of_range": 1020,
+    "no_enddate": 238,
+    "close_too_soon": 1168,
+    "close_too_late": 4631
+  },
+  "n_markets": 300,
+  "category_counts": {
+    "sports": 45,
+    "crypto": 45,
+    "politics": 45,
+    "finance": 40,
+    "entertainment": 35,
+    "tech_ai": 45,
+    "other": 45
+  },
+  "non_sports_count": 255,
+  "market_p_histogram": {
+    "0": 139,
+    "1": 45,
+    "2": 23,
+    "3": 9,
+    "4": 11,
+    "5": 6,
+    "6": 9,
+    "7": 12,
+    "8": 9,
+    "9": 37
+  },
+  "targets": {
+    "total": 300,
+    "non_sports": 90,
+    "min_per_category": 15,
+    "bin_0": 50,
+    "bin_5_8": 30
+  },
+  "deficits": {
+    "total": 0,
+    "non_sports": 0,
+    "categories_below_min": {}
+  },
+  "bin_floor_note": "bin_0 / bin_5_8 floors are indexed by p_opus and cannot be measured before predictions exist; freeze_oos.py performs the p_opus bin-coverage check. market_p_histogram above is a build-time proxy only.",
+  "cohort_sha256": "93bab37f034486b77a541a6262c09e610339960a72bf801fd17122e9a5dca1cc",
+  "cohort_bytes": 87115,
+  "baseline_sha256": "cf8807cca0b7e84b5fb127d84732f283e99efcfda2c6fe101d93fed5c6e84337",
+  "baseline_bytes": 94211,
+  "signing": "NONE"
+}

@@ -1,0 +1,97 @@
+{
+  "schema": "pythia.backtest_freeze.v1",
+  "track": "oos_forward_2026-05-30",
+  "experiment_kind": "oos_forward_paper_only",
+  "pre_registered_protocol_sha256": "64105914d287d94ee1ced9dfa28655cbdd0ed8b00f103e51bce758cb1c2da384",
+  "protocol_amendment_v1_sha256": "8cbf4c996ead469dec99359116ca2c3f17d3330cf1254ba0ab47329375297f69",
+  "protocol_amendment_v2_sha256": "33f530a7ce06f8ae02d4db6e7d2b68a5db53309c9372f92d505d292700b52537",
+  "predictor_model": "claude-opus-4-8",
+  "register_at_utc": "2026-05-29T07:00:00Z",
+  "frozen_at_utc": "2026-05-29T07:35:28.789593Z",
+  "n_markets": 300,
+  "n_predictions": 300,
+  "invariants_checked_at_freeze": {
+    "scheduled_close_ge_register_plus_24h": true,
+    "cohort_has_no_price_field": true,
+    "coverage_exactly_once": true,
+    "realized_closedTime_check": "DEFERRED to evaluate_at (markets still open)"
+  },
+  "p_opus_bin_counts": {
+    "0": 72,
+    "1": 82,
+    "2": 41,
+    "3": 26,
+    "4": 12,
+    "5": 26,
+    "6": 14,
+    "7": 17,
+    "8": 7,
+    "9": 3
+  },
+  "soft_floor_status": {
+    "bin_0": {
+      "count": 72,
+      "floor": 50,
+      "deficit": 0
+    },
+    "bin_5_8": {
+      "count": 64,
+      "floor": 30,
+      "deficit": 0
+    },
+    "note": "Soft floors — deficits recorded, cohort NOT padded (§2.2)."
+  },
+  "artifacts": [
+    {
+      "label": "cohort",
+      "path": "data/research/backtests/oos_forward_2026-05-30/cohort.jsonl",
+      "sha256": "93bab37f034486b77a541a6262c09e610339960a72bf801fd17122e9a5dca1cc",
+      "bytes": 87115
+    },
+    {
+      "label": "cohort_meta",
+      "path": "data/research/backtests/oos_forward_2026-05-30/cohort_meta.json",
+      "sha256": "23fe504155fb205f32ca377492cb200e8a6e1ba6ac3fddb6c9088b0b1d06cdd7",
+      "bytes": 2345
+    },
+    {
+      "label": "baseline_prices",
+      "path": "data/research/backtests/oos_forward_2026-05-30/baseline_prices.jsonl",
+      "sha256": "cf8807cca0b7e84b5fb127d84732f283e99efcfda2c6fe101d93fed5c6e84337",
+      "bytes": 94211
+    },
+    {
+      "label": "predictions",
+      "path": "data/research/backtests/oos_forward_2026-05-30/predictions.jsonl",
+      "sha256": "2e8c2812560f73c0f632a532dc5500c8f0519bf0e982da01f5615b92c88f9326",
+      "bytes": 123651
+    },
+    {
+      "label": "oos_forward_protocol",
+      "path": "data/research/backtests/cutoff_clean_2026-05-29/oos_forward_protocol.md",
+      "sha256": "64105914d287d94ee1ced9dfa28655cbdd0ed8b00f103e51bce758cb1c2da384",
+      "bytes": 10068
+    },
+    {
+      "label": "oos_forward_protocol_amendment_v1",
+      "path": "data/research/backtests/oos_forward_2026-05-30/oos_forward_protocol_amendment_v1.md",
+      "sha256": "8cbf4c996ead469dec99359116ca2c3f17d3330cf1254ba0ab47329375297f69",
+      "bytes": 3447
+    },
+    {
+      "label": "oos_forward_protocol_amendment_v2",
+      "path": "data/research/backtests/oos_forward_2026-05-30/oos_forward_protocol_amendment_v2.md",
+      "sha256": "33f530a7ce06f8ae02d4db6e7d2b68a5db53309c9372f92d505d292700b52537",
+      "bytes": 10241
+    }
+  ],
+  "git_witness_oos_forward_v1": null,
+  "notes": [
+    "OOS forward-paper experiment. Outcomes UNKNOWN at freeze — predictions.jsonl sealed before any y is observable.",
+    "Predictor model = claude-opus-4-8 (amendment v1, sha 8cbf4c996ead469d…). Sealed protocol doc names 4.7 but is unedited; the swap is recorded in the amendment, leakage-safe because future-resolving markets are post-cutoff for any current model.",
+    "Anti-leakage: cohort.jsonl exposes only id/close-date/question; price sealed separately in baseline_prices.jsonl.",
+    "closedTime invariant enforced at freeze against scheduled endDate; realized closedTime re-asserted at evaluate_at (2026-06-29).",
+    "Track is paper-only. Pinata/IPFS upload is GATED on a PASS verdict at evaluate_at AND a debate --critique gate (§6) — NOT done at freeze.",
+    "NO re-prompt permitted T2→T3: predictions.jsonl must show exactly one modifying commit in git history (§3 invariant 4)."
+  ]
+}

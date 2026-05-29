@@ -1,7 +1,11 @@
-"""OOS forward cohort builder — implements oos_forward_protocol.md §2 / §5.
+"""OOS forward cohort builder — implements oos_forward_protocol.md §2 / §5
+plus Amendment v2 (sha 33f530a7…): immediate-start register, realized-universe
+pagination fix, price band [0.01,0.99], deterministic round-robin stratified
+sample (cap 300), Yes/No-only scope.
 
-Runs at register_at = 2026-05-30T00:00:00Z. Snapshots Polymarket OPEN markets,
-applies the pre-registered §2.1 filters, and seals three artifacts:
+Runs at register_at = 2026-05-29T07:00:00Z (Amendment v2 §1). Snapshots
+Polymarket OPEN markets, applies the pre-registered §2.1 filters, draws a
+stratified sample, and seals three artifacts:
   - cohort.jsonl          (NO price — exactly what predict_oos.py will show Opus)
   - baseline_prices.jsonl (market_p_at_register sealed separately, never in prompt)
   - cohort_meta.json      (filter spec + target-floor deficits + sha256)
@@ -9,9 +13,10 @@ applies the pre-registered §2.1 filters, and seals three artifacts:
 Filters (oos_forward_protocol.md §2.1, doc sha256 64105914…):
   - scheduled close ≥ register_at + 24h   (anti-staleness; invariant 1)
   - scheduled close ≤ register_at + 30d   (bounded collection horizon)
-  - binary YES/NO outcomes only
-  - market_p_at_register ∈ [0.02, 0.98]   (drop degenerate Kelly priors)
+  - binary YES/NO outcomes only (non-Yes/No 2-outcome deferred — Amendment v2 §3)
+  - market_p_at_register ∈ [0.01, 0.99]   (Amendment v2 §1; drop degenerate priors)
   - 7 category buckets, no exclusion
+  - capped at 300 via round-robin stratified sample (Amendment v2 §3)
 
 FIELD MAPPING NOTE: open markets do not yet carry `closedTime` (set only on
 resolution). The §3 invariant `closedTime ≥ register_at + 24h` is enforced here
@@ -50,15 +55,15 @@ META = OUT_DIR / "cohort_meta.json"
 
 GAMMA_API = "https://gamma-api.polymarket.com/markets"
 UA = "pythia-oos-cohort-builder/0.1"
-SLEEP_SEC = 0.35
-PAGE_LIMIT = 500
+SLEEP_SEC = 0.30
+PAGE_LIMIT = 100  # Amendment v2: Gamma returns ≤100/req regardless of limit
 
 # Canonical anchors — fixed so the filter is reproducible regardless of the
 # actual cron fire time. register_at is the protocol's pre-registered T0.
-REGISTER_AT = datetime(2026, 5, 30, 0, 0, 0, tzinfo=timezone.utc)
+REGISTER_AT = datetime(2026, 5, 29, 7, 0, 0, tzinfo=timezone.utc)  # Amendment v2 §1
 CLOSE_MIN = REGISTER_AT + timedelta(hours=24)
 CLOSE_MAX = REGISTER_AT + timedelta(days=30)
-P_LO, P_HI = 0.02, 0.98
+P_LO, P_HI = 0.01, 0.99  # Amendment v2 §1
 
 PROTOCOL_SHA256 = "64105914d287d94ee1ced9dfa28655cbdd0ed8b00f103e51bce758cb1c2da384"
 
@@ -216,6 +221,53 @@ def _harvest(max_pages: int) -> list[dict]:
     return out
 
 
+def _stratified_sample(selected, baseline, cap):
+    """Amendment v2 §3: deterministic round-robin stratified sample.
+
+    Partition the qualifying pool by category; within each category sort by
+    (volume_at_register desc, id asc); draw round-robin across CATEGORIES in
+    fixed order one market at a time until `cap` reached or pool exhausted;
+    final re-sort by (volume desc, id asc) for deterministic file bytes.
+    No outcome-conditioned choice — pre-committed before any p_yes exists.
+    """
+    def _vol(i):  # Gamma may return volume as str/None — coerce to float
+        v = selected[i]["volume_at_register"]
+        try:
+            return float(v)
+        except (TypeError, ValueError):
+            return 0.0
+
+    def _key(i):
+        return (-_vol(i), str(selected[i]["id"]))
+
+    if len(selected) <= cap:
+        order = sorted(range(len(selected)), key=_key)
+        return [selected[i] for i in order], [baseline[i] for i in order]
+
+    by_cat: dict[str, list[int]] = {}
+    for i, r in enumerate(selected):
+        by_cat.setdefault(r["category"], []).append(i)
+    for c in by_cat:
+        by_cat[c].sort(key=_key)
+
+    cats = [c for c in CATEGORIES if by_cat.get(c)]
+    cats += [c for c in by_cat if c not in CATEGORIES]  # safety: unknown cats
+    ptr = {c: 0 for c in cats}
+    chosen: list[int] = []
+    while len(chosen) < cap:
+        progressed = False
+        for c in cats:
+            if ptr[c] < len(by_cat[c]):
+                chosen.append(by_cat[c][ptr[c]]); ptr[c] += 1; progressed = True
+                if len(chosen) >= cap:
+                    break
+        if not progressed:
+            break
+
+    chosen.sort(key=_key)
+    return [selected[i] for i in chosen], [baseline[i] for i in chosen]
+
+
 def main(max_pages: int, force: bool) -> int:
     if COHORT.exists() and not force:
         print(f"🚨 {COHORT} exists; refusing to overwrite without --force", file=sys.stderr)
@@ -276,12 +328,9 @@ def main(max_pages: int, force: bool) -> int:
             "polled_at": ts_iso,
         })
 
-    # Stable order by volume desc (None last) — deterministic file bytes.
-    order = sorted(range(len(selected)),
-                   key=lambda i: (selected[i]["volume_at_register"] or 0),
-                   reverse=True)
-    selected = [selected[i] for i in order]
-    baseline = [baseline[i] for i in order]
+    # Amendment v2 §3: cap to TARGETS["total"] via deterministic round-robin
+    # stratified sample (also fixes deterministic volume-desc / id-asc order).
+    selected, baseline = _stratified_sample(selected, baseline, TARGETS["total"])
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     with COHORT.open("w") as f:
@@ -376,8 +425,8 @@ def main(max_pages: int, force: bool) -> int:
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    ap.add_argument("--max-pages", type=int, default=30,
-                    help="max Gamma pages (×500) to scan")
+    ap.add_argument("--max-pages", type=int, default=120,
+                    help="max Gamma pages (×100) to scan")
     ap.add_argument("--force", action="store_true",
                     help="overwrite an existing cohort.jsonl")
     args = ap.parse_args()

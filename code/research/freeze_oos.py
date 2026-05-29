@@ -43,14 +43,18 @@ META = DIR / "cohort_meta.json"
 PRED = DIR / "predictions.jsonl"
 PROTOCOL = REPO / "data" / "research" / "backtests" / "cutoff_clean_2026-05-29" / "oos_forward_protocol.md"
 AMENDMENT = DIR / "oos_forward_protocol_amendment_v1.md"
+AMENDMENT_V2 = DIR / "oos_forward_protocol_amendment_v2.md"
 FREEZE = DIR / "freeze.json"
 
-REGISTER_AT = datetime(2026, 5, 30, 0, 0, 0, tzinfo=timezone.utc)
+REGISTER_AT = datetime(2026, 5, 29, 7, 0, 0, tzinfo=timezone.utc)  # Amendment v2 §1
 CLOSE_MIN = REGISTER_AT + timedelta(hours=24)
 PROTOCOL_SHA256 = "64105914d287d94ee1ced9dfa28655cbdd0ed8b00f103e51bce758cb1c2da384"
 # Amendment v1 swaps the predictor 4.7 → 4.8 without editing the sealed protocol
 # doc. The amendment is itself sha-anchored so it cannot drift either.
 AMENDMENT_SHA256 = "8cbf4c996ead469dec99359116ca2c3f17d3330cf1254ba0ab47329375297f69"
+# Amendment v2: immediate-start register_at + realized-universe (pagination fix,
+# Yes/No-only, round-robin stratified sample cap=300). Also sha-anchored.
+AMENDMENT_V2_SHA256 = "33f530a7ce06f8ae02d4db6e7d2b68a5db53309c9372f92d505d292700b52537"
 PREDICTOR_MODEL = "claude-opus-4-8"
 
 BIN_0_FLOOR = 50
@@ -81,6 +85,7 @@ def _check_protocol_sha() -> None:
     for label, path, want in (
         ("protocol doc", PROTOCOL, PROTOCOL_SHA256),
         ("amendment v1", AMENDMENT, AMENDMENT_SHA256),
+        ("amendment v2", AMENDMENT_V2, AMENDMENT_V2_SHA256),
     ):
         actual = _sha(path)
         if actual != want:
@@ -92,7 +97,7 @@ def _check_protocol_sha() -> None:
 
 
 def cmd_seal() -> int:
-    for p in (COHORT, BASELINE, META, PRED, PROTOCOL, AMENDMENT):
+    for p in (COHORT, BASELINE, META, PRED, PROTOCOL, AMENDMENT, AMENDMENT_V2):
         if not p.exists():
             print(f"🚨 ABORT: missing required input {p}", file=sys.stderr)
             return 1
@@ -155,6 +160,7 @@ def cmd_seal() -> int:
         ("predictions", PRED),
         ("oos_forward_protocol", PROTOCOL),
         ("oos_forward_protocol_amendment_v1", AMENDMENT),
+        ("oos_forward_protocol_amendment_v2", AMENDMENT_V2),
     ]
     art_block = []
     for label, p in artifacts:
@@ -172,6 +178,7 @@ def cmd_seal() -> int:
         "experiment_kind": "oos_forward_paper_only",
         "pre_registered_protocol_sha256": PROTOCOL_SHA256,
         "protocol_amendment_v1_sha256": AMENDMENT_SHA256,
+        "protocol_amendment_v2_sha256": AMENDMENT_V2_SHA256,
         "predictor_model": PREDICTOR_MODEL,
         "register_at_utc": REGISTER_AT.isoformat().replace("+00:00", "Z"),
         "frozen_at_utc": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
@@ -234,7 +241,7 @@ def cmd_witness(commit: str, pushed_at: str) -> int:
         "branch": "main",
         "remote": "git@github.com:pythialabs2026/pythia.git",
         "pushed_at_utc": pushed_at,
-        "anchors": "cohort + cohort_meta + baseline_prices + predictions + oos_forward_protocol + amendment_v1",
+        "anchors": "cohort + cohort_meta + baseline_prices + predictions + oos_forward_protocol + amendment_v1 + amendment_v2",
     }
     fz.setdefault("notes", []).append(
         f"git_witness_oos_forward_v1 anchored at commit {commit} ({pushed_at})."
