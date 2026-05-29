@@ -1,6 +1,9 @@
 """OOS forward predictor — implements oos_forward_protocol.md §3 (T1) / §5.
 
-Opus 4.7 issues p_yes for each cohort market. The rendered prompt exposes ONLY
+Opus 4.8 issues p_yes for each cohort market (model swap from the sealed
+protocol's 4.7 is recorded in oos_forward_protocol_amendment_v1.md — leakage-safe
+because any market resolving after register_at is post-cutoff for ANY model that
+exists on 2026-05-30, 4.8 included). The rendered prompt exposes ONLY
 id, scheduled-close date, and question text — NEVER price, volume, or outcome.
 This is the anti-leakage invariant (§3 invariant 2): the model must not see the
 market's own probability, or the comparison vs market_p stops being independent.
@@ -36,7 +39,7 @@ DIR = REPO / "data" / "research" / "backtests" / "oos_forward_2026-05-30"
 COHORT = DIR / "cohort.jsonl"
 PRED = DIR / "predictions.jsonl"
 
-MODEL_ID = "claude-opus-4-7"
+MODEL_ID = "claude-opus-4-8"
 EXPERIMENT = "oos_forward_2026-05-30"
 BATCH_SIZE_DEFAULT = 30
 

@@ -42,11 +42,16 @@ BASELINE = DIR / "baseline_prices.jsonl"
 META = DIR / "cohort_meta.json"
 PRED = DIR / "predictions.jsonl"
 PROTOCOL = REPO / "data" / "research" / "backtests" / "cutoff_clean_2026-05-29" / "oos_forward_protocol.md"
+AMENDMENT = DIR / "oos_forward_protocol_amendment_v1.md"
 FREEZE = DIR / "freeze.json"
 
 REGISTER_AT = datetime(2026, 5, 30, 0, 0, 0, tzinfo=timezone.utc)
 CLOSE_MIN = REGISTER_AT + timedelta(hours=24)
 PROTOCOL_SHA256 = "64105914d287d94ee1ced9dfa28655cbdd0ed8b00f103e51bce758cb1c2da384"
+# Amendment v1 swaps the predictor 4.7 → 4.8 without editing the sealed protocol
+# doc. The amendment is itself sha-anchored so it cannot drift either.
+AMENDMENT_SHA256 = "8cbf4c996ead469dec99359116ca2c3f17d3330cf1254ba0ab47329375297f69"
+PREDICTOR_MODEL = "claude-opus-4-8"
 
 BIN_0_FLOOR = 50
 BIN_5_8_FLOOR = 30
@@ -73,17 +78,21 @@ def _load_jsonl(p: Path) -> list[dict]:
 
 
 def _check_protocol_sha() -> None:
-    actual = _sha(PROTOCOL)
-    if actual != PROTOCOL_SHA256:
-        print(f"🚨 ABORT: protocol doc sha256 mismatch.\n"
-              f"   expected {PROTOCOL_SHA256}\n   actual   {actual}\n"
-              f"   The pre-registered protocol has changed — chain broken.",
-              file=sys.stderr)
-        sys.exit(3)
+    for label, path, want in (
+        ("protocol doc", PROTOCOL, PROTOCOL_SHA256),
+        ("amendment v1", AMENDMENT, AMENDMENT_SHA256),
+    ):
+        actual = _sha(path)
+        if actual != want:
+            print(f"🚨 ABORT: {label} sha256 mismatch.\n"
+                  f"   expected {want}\n   actual   {actual}\n"
+                  f"   The pre-registered protocol has changed — chain broken.",
+                  file=sys.stderr)
+            sys.exit(3)
 
 
 def cmd_seal() -> int:
-    for p in (COHORT, BASELINE, META, PRED, PROTOCOL):
+    for p in (COHORT, BASELINE, META, PRED, PROTOCOL, AMENDMENT):
         if not p.exists():
             print(f"🚨 ABORT: missing required input {p}", file=sys.stderr)
             return 1
@@ -145,6 +154,7 @@ def cmd_seal() -> int:
         ("baseline_prices", BASELINE),
         ("predictions", PRED),
         ("oos_forward_protocol", PROTOCOL),
+        ("oos_forward_protocol_amendment_v1", AMENDMENT),
     ]
     art_block = []
     for label, p in artifacts:
@@ -161,6 +171,8 @@ def cmd_seal() -> int:
         "track": "oos_forward_2026-05-30",
         "experiment_kind": "oos_forward_paper_only",
         "pre_registered_protocol_sha256": PROTOCOL_SHA256,
+        "protocol_amendment_v1_sha256": AMENDMENT_SHA256,
+        "predictor_model": PREDICTOR_MODEL,
         "register_at_utc": REGISTER_AT.isoformat().replace("+00:00", "Z"),
         "frozen_at_utc": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
         "n_markets": len(cohort),
@@ -182,6 +194,10 @@ def cmd_seal() -> int:
         "notes": [
             "OOS forward-paper experiment. Outcomes UNKNOWN at freeze — "
             "predictions.jsonl sealed before any y is observable.",
+            f"Predictor model = {PREDICTOR_MODEL} (amendment v1, sha "
+            f"{AMENDMENT_SHA256[:16]}…). Sealed protocol doc names 4.7 but is "
+            "unedited; the swap is recorded in the amendment, leakage-safe "
+            "because future-resolving markets are post-cutoff for any current model.",
             "Anti-leakage: cohort.jsonl exposes only id/close-date/question; "
             "price sealed separately in baseline_prices.jsonl.",
             "closedTime invariant enforced at freeze against scheduled endDate; "
@@ -218,7 +234,7 @@ def cmd_witness(commit: str, pushed_at: str) -> int:
         "branch": "main",
         "remote": "git@github.com:pythialabs2026/pythia.git",
         "pushed_at_utc": pushed_at,
-        "anchors": "cohort + cohort_meta + baseline_prices + predictions + oos_forward_protocol",
+        "anchors": "cohort + cohort_meta + baseline_prices + predictions + oos_forward_protocol + amendment_v1",
     }
     fz.setdefault("notes", []).append(
         f"git_witness_oos_forward_v1 anchored at commit {commit} ({pushed_at})."
