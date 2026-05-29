@@ -1,0 +1,204 @@
+{
+  "experiment": "cutoff_clean_2026-05-29",
+  "track": "paper-only",
+  "model": "claude-opus-4-7",
+  "generated_at": "2026-05-29T04:02:00.946765Z",
+  "n_markets_total": 390,
+  "n_markets_paired_with_market_price": 299,
+  "brier": {
+    "all_markets": {
+      "opus": 0.1004,
+      "naive": 0.25
+    },
+    "paired_with_market": {
+      "opus": 0.1085,
+      "market": 0.1501,
+      "opus_win_rate_vs_market": 0.7324,
+      "opus_wins": 219,
+      "n": 299
+    }
+  },
+  "calibration": {
+    "buckets": [
+      {
+        "bin_lo": 0.0,
+        "bin_hi": 0.1,
+        "n": 225,
+        "p_mean": 0.0302,
+        "y_rate": 0.0267,
+        "drift": 0.0036
+      },
+      {
+        "bin_lo": 0.1,
+        "bin_hi": 0.2,
+        "n": 45,
+        "p_mean": 0.1313,
+        "y_rate": 0.1333,
+        "drift": 0.002
+      },
+      {
+        "bin_lo": 0.2,
+        "bin_hi": 0.3,
+        "n": 27,
+        "p_mean": 0.2178,
+        "y_rate": 0.4444,
+        "drift": 0.2267
+      },
+      {
+        "bin_lo": 0.3,
+        "bin_hi": 0.4,
+        "n": 21,
+        "p_mean": 0.3167,
+        "y_rate": 0.0952,
+        "drift": 0.2214
+      },
+      {
+        "bin_lo": 0.4,
+        "bin_hi": 0.5,
+        "n": 22,
+        "p_mean": 0.4259,
+        "y_rate": 0.4545,
+        "drift": 0.0286
+      },
+      {
+        "bin_lo": 0.5,
+        "bin_hi": 0.6,
+        "n": 28,
+        "p_mean": 0.5268,
+        "y_rate": 0.5,
+        "drift": 0.0268
+      },
+      {
+        "bin_lo": 0.6,
+        "bin_hi": 0.7,
+        "n": 8,
+        "p_mean": 0.6338,
+        "y_rate": 0.5,
+        "drift": 0.1338
+      },
+      {
+        "bin_lo": 0.7,
+        "bin_hi": 0.8,
+        "n": 3,
+        "p_mean": 0.76,
+        "y_rate": 0.3333,
+        "drift": 0.4267
+      },
+      {
+        "bin_lo": 0.8,
+        "bin_hi": 0.9,
+        "n": 8,
+        "p_mean": 0.8538,
+        "y_rate": 0.75,
+        "drift": 0.1038
+      },
+      {
+        "bin_lo": 0.9,
+        "bin_hi": 1.0,
+        "n": 3,
+        "p_mean": 0.9333,
+        "y_rate": 1,
+        "drift": 0.0667
+      }
+    ],
+    "max_drift_any": 0.4267,
+    "max_drift_n_ge_10": 0.2267
+  },
+  "monthly_brier_opus": {
+    "2026-02": {
+      "n": 93,
+      "mean_brier_opus": 0.0823
+    },
+    "2026-03": {
+      "n": 60,
+      "mean_brier_opus": 0.0781
+    },
+    "2026-04": {
+      "n": 129,
+      "mean_brier_opus": 0.1238
+    },
+    "2026-05": {
+      "n": 108,
+      "mean_brier_opus": 0.1003
+    }
+  },
+  "pnl": {
+    "bankroll_start": 1000.0,
+    "bankroll_end": 27609.0712,
+    "roi": 26.609071,
+    "n_bets": 231,
+    "n_winners": 175,
+    "win_rate": 0.7576,
+    "kelly_cap_bind_rate": 1.0,
+    "sharpe_daily": 4.4422,
+    "max_drawdown": 0.1408
+  },
+  "pre_registered_criteria": {
+    "n_resolved_ge_50": {
+      "threshold": 50,
+      "actual": 390,
+      "pass": true
+    },
+    "opus_brier_lt_market": {
+      "threshold": null,
+      "actual": [
+        0.1085,
+        0.1501
+      ],
+      "pass": true
+    },
+    "opus_win_rate_gt_0_55": {
+      "threshold": 0.55,
+      "actual": 0.7324,
+      "pass": true
+    },
+    "max_bucket_drift_lt_0_15": {
+      "threshold": 0.15,
+      "actual": 0.4267,
+      "pass": false
+    },
+    "max_bucket_drift_n10_lt_0_15": {
+      "threshold": 0.15,
+      "actual": 0.2267,
+      "pass": false,
+      "note": "buckets with n>=10 only — robustness check"
+    },
+    "final_nav_gt_1020": {
+      "threshold": 1020,
+      "actual": 27609.07,
+      "pass": true
+    },
+    "sharpe_daily_gt_1_0": {
+      "threshold": 1.0,
+      "actual": 4.4422,
+      "pass": true
+    },
+    "max_dd_lt_0_30": {
+      "threshold": 0.3,
+      "actual": 0.1408,
+      "pass": true
+    }
+  },
+  "verdict": {
+    "all_pass": false,
+    "n_pass": 6,
+    "n_total": 8
+  },
+  "honest_caveats": [
+    "Kelly cap binds 100% of bets — effective sizing is flat 5%, not Kelly.",
+    "Calibration drift fails the 0.15 threshold; concentrated in mid-confidence (0.2–0.4) and sparse (n<5) buckets.",
+    "Monthly Opus Brier: Feb 0.0823 vs Apr 0.1238 — possible Jan-cutoff leakage into Feb resolutions.",
+    "Markets with baseline=null (n=91, mostly low-vol) excluded from market comparison and P&L.",
+    "Friction model (2% fee + 1% slippage) is conservative-optimistic — real Polymarket execution is worse in thin markets.",
+    "Survivorship: cohort = only resolved markets. Disputed/refunded markets invisible.",
+    "PAPER-ONLY: not a signed Pythia prediction. NOT promoted to Nostr/IPFS track."
+  ],
+  "artifacts_sha256": {
+    "cohort": "7f4aa996224108e932b714e5f084d7ddc55063b05d69efd63aaea33ffc7e8120",
+    "predictions": "60beeb3f8b3a835ba0ccd26bc0f392f25dd545b29ab8d1c11d49664940f9282e",
+    "baseline_prices": "68056c4888dedfa121d286fa443282e9cf095a7f4358536a6a54221e6a6af40c",
+    "brier_scores": "b46fc31aee30c23a656ce59946efb473cad2c4465564d34a076b41dc64564341",
+    "pnl_log": "453eee8f9e6ecdce034db6225ef263ebe3941c25ce3d78fd4ffe4ca8f60cec7a",
+    "daily_nav": "30fc2e3318dd5acca2882b7e7b8f5d38ef73648eda37ffa17b80d3eb6503d9f7"
+  }
+}

@@ -22,6 +22,48 @@
       "path": "data/research/backtests/cutoff_clean_2026-05-29/methodology.md",
       "sha256": "0e8096272614db16b78afa17b7af399f31b4fd0d4f4fb20c55a8430510924c03",
       "bytes": 7576
+    },
+    {
+      "label": "predictions",
+      "path": "data/research/backtests/cutoff_clean_2026-05-29/predictions.jsonl",
+      "sha256": "60beeb3f8b3a835ba0ccd26bc0f392f25dd545b29ab8d1c11d49664940f9282e",
+      "bytes": 163849
+    },
+    {
+      "label": "baseline_prices",
+      "path": "data/research/backtests/cutoff_clean_2026-05-29/baseline_prices.jsonl",
+      "sha256": "68056c4888dedfa121d286fa443282e9cf095a7f4358536a6a54221e6a6af40c",
+      "bytes": 118724
+    },
+    {
+      "label": "brier_scores",
+      "path": "data/research/backtests/cutoff_clean_2026-05-29/brier_scores.jsonl",
+      "sha256": "b46fc31aee30c23a656ce59946efb473cad2c4465564d34a076b41dc64564341",
+      "bytes": 91540
+    },
+    {
+      "label": "pnl_log",
+      "path": "data/research/backtests/cutoff_clean_2026-05-29/pnl_log.jsonl",
+      "sha256": "453eee8f9e6ecdce034db6225ef263ebe3941c25ce3d78fd4ffe4ca8f60cec7a",
+      "bytes": 81258
+    },
+    {
+      "label": "daily_nav",
+      "path": "data/research/backtests/cutoff_clean_2026-05-29/daily_nav.jsonl",
+      "sha256": "30fc2e3318dd5acca2882b7e7b8f5d38ef73648eda37ffa17b80d3eb6503d9f7",
+      "bytes": 1910
+    },
+    {
+      "label": "summary",
+      "path": "data/research/backtests/cutoff_clean_2026-05-29/summary.json",
+      "sha256": "85bca64075cacf0cf9ef584765a8c40f87df1a9314504e64a13652571006fb8a",
+      "bytes": 5006
+    },
+    {
+      "label": "calibration_plot",
+      "path": "data/research/backtests/cutoff_clean_2026-05-29/calibration.txt",
+      "sha256": "50514d0d56d83f2979094098312cadc56f78de2b19536c0eba76b80a1322a4cd",
+      "bytes": 2620
     }
   ],
   "git_witness": {
@@ -33,6 +75,8 @@
   "notes": [
     "predictions.jsonl + baseline_prices.jsonl + summary.json artifacts will be added in addendum freeze block after Opus prediction step.",
     "Knowledge-cutoff safety: closedTime >= 2026-02-01 buffers Opus 4.7 cutoff (January 2026).",
-    "Track is paper-only research. Not IPFS pinned, not Nostr signed."
-  ]
+    "Track is paper-only research. Not IPFS pinned, not Nostr signed.",
+    "Addendum 2026-05-29: predictions/baseline/brier/pnl/nav/summary/calibration sealed."
+  ],
+  "addendum_frozen_at_utc": "2026-05-29T04:02:40.635141Z"
 }
