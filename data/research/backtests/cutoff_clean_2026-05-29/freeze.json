@@ -157,5 +157,14 @@
     "anchors": "significance_test + leakage_stress + category_breakdown + kelly_sensitivity + summary_v2",
     "diagnostic_pass_rate": "4/4"
   },
-  "addendum_v3_frozen_at_utc": "2026-05-29T04:50:16.768321Z"
+  "addendum_v3_frozen_at_utc": "2026-05-29T04:50:16.768321Z",
+  "git_witness_v3": {
+    "commit": "4a147c4",
+    "branch": "main",
+    "remote": "git@github.com:pythialabs2026/pythia.git",
+    "pushed_at_utc": "2026-05-29T04:51:00Z",
+    "anchors": "drop_sports_robustness + calibration_deepdive + bin_aware_sizing + oos_forward_protocol + summary_v3",
+    "diagnostic_pass_rate": "4/5",
+    "honest_fail": "drop_sports_robustness — non-sports edge p=0.097 fails 5% gate. Pre-committed for OOS forward (Step 17)."
+  }
 }
