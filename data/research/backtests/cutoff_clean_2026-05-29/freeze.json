@@ -78,5 +78,12 @@
     "Track is paper-only research. Not IPFS pinned, not Nostr signed.",
     "Addendum 2026-05-29: predictions/baseline/brier/pnl/nav/summary/calibration sealed."
   ],
-  "addendum_frozen_at_utc": "2026-05-29T04:02:40.635141Z"
+  "addendum_frozen_at_utc": "2026-05-29T04:02:40.635141Z",
+  "git_witness_addendum": {
+    "commit": "1972b4505e4e0c1d3e135e6169e07e4ad5e11a5a",
+    "branch": "main",
+    "remote": "git@github.com:pythialabs2026/pythia.git",
+    "pushed_at_utc": "2026-05-29T04:03:13Z",
+    "anchors": "predictions + baseline + brier + pnl + nav + summary + calibration"
+  }
 }
