@@ -186,5 +186,14 @@
     "diagnostic_pass_rate": "4/5",
     "honest_fail": "drop_sports_robustness \u2014 non-sports edge p=0.097 fails 5% gate. Pre-committed for OOS forward (Step 17)."
   },
-  "addendum_v4_frozen_at_utc": "2026-05-29T05:20:22.063711Z"
+  "addendum_v4_frozen_at_utc": "2026-05-29T05:20:22.063711Z",
+  "git_witness_v4": {
+    "commit": "2719df0",
+    "branch": "main",
+    "remote": "git@github.com:pythialabs2026/pythia.git",
+    "pushed_at_utc": "2026-05-29T05:21:06Z",
+    "anchors": "leakage_curve + leakage_curve_sensitivity + summary_v4",
+    "diagnostic_pass_rate": "4/4",
+    "diagnostic_finding": "Step 10 Brier asymmetry is cluster/event-driven, robust at 7d/14d/21d window sizes — NOT a smooth temporal cutoff-leakage gradient. Does not eliminate leakage; Step 17 forward protocol remains required."
+  }
 }
