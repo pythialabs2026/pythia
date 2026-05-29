@@ -25,10 +25,10 @@
     }
   ],
   "git_witness": {
-    "commit": "PENDING",
+    "commit": "4899a05d3b46b61bff405364591ac00928fcc7bc",
     "branch": "main",
     "remote": "git@github.com:pythialabs2026/pythia.git",
-    "pushed_at_utc": "PENDING"
+    "pushed_at_utc": "2026-05-29T03:33:29.838498Z"
   },
   "notes": [
     "predictions.jsonl + baseline_prices.jsonl + summary.json artifacts will be added in addendum freeze block after Opus prediction step.",
