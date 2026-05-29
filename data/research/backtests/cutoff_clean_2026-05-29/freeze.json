@@ -124,6 +124,24 @@
       "path": "data/research/backtests/cutoff_clean_2026-05-29/summary_v3.json",
       "sha256": "29f32ffa133611271445f0e35068b0f7dbdb084d6f168b09dd009fc402c33084",
       "bytes": 4739
+    },
+    {
+      "label": "leakage_curve_v4",
+      "path": "data/research/backtests/cutoff_clean_2026-05-29/leakage_curve.json",
+      "sha256": "3cac10a95a4c3ed0b368dfa964eb16e765f52fa57c98ba3e58a3029f497994ac",
+      "bytes": 3916
+    },
+    {
+      "label": "leakage_curve_sensitivity_v4",
+      "path": "data/research/backtests/cutoff_clean_2026-05-29/leakage_curve_sensitivity.json",
+      "sha256": "290fe42549f9ae1a4d90377aef89db2950bd1f7ab9018efe81576c28a0f7cce5",
+      "bytes": 8730
+    },
+    {
+      "label": "summary_v4",
+      "path": "data/research/backtests/cutoff_clean_2026-05-29/summary_v4.json",
+      "sha256": "262ef2ee4464490b06a2f7961a14324fca100881e24495ef33ac48a5337cd638",
+      "bytes": 4619
     }
   ],
   "git_witness": {
@@ -138,7 +156,8 @@
     "Track is paper-only research. Not IPFS pinned, not Nostr signed.",
     "Addendum 2026-05-29: predictions/baseline/brier/pnl/nav/summary/calibration sealed.",
     "Addendum v2 2026-05-29: significance_test + leakage_stress + category_breakdown + kelly_sensitivity + summary_v2 sealed.",
-    "Addendum v3 2026-05-29: drop_sports + calibration + bin_aware_sizing + oos_forward_protocol + summary_v3 sealed."
+    "Addendum v3 2026-05-29: drop_sports + calibration + bin_aware_sizing + oos_forward_protocol + summary_v3 sealed.",
+    "Addendum v4 2026-05-29: leakage_curve (Step 19) + leakage_curve_sensitivity (Step 20) + summary_v4 sealed."
   ],
   "addendum_frozen_at_utc": "2026-05-29T04:02:40.635141Z",
   "git_witness_addendum": {
@@ -165,6 +184,7 @@
     "pushed_at_utc": "2026-05-29T04:51:00Z",
     "anchors": "drop_sports_robustness + calibration_deepdive + bin_aware_sizing + oos_forward_protocol + summary_v3",
     "diagnostic_pass_rate": "4/5",
-    "honest_fail": "drop_sports_robustness — non-sports edge p=0.097 fails 5% gate. Pre-committed for OOS forward (Step 17)."
-  }
+    "honest_fail": "drop_sports_robustness \u2014 non-sports edge p=0.097 fails 5% gate. Pre-committed for OOS forward (Step 17)."
+  },
+  "addendum_v4_frozen_at_utc": "2026-05-29T05:20:22.063711Z"
 }

@@ -1,0 +1,80 @@
+{
+  "experiment": "cutoff_clean_2026-05-29",
+  "addendum_version": "v4",
+  "generated_at": "2026-05-29T05:20:22.063047Z",
+  "preceding_artifacts": {
+    "summary_v1": {
+      "path": "data/research/backtests/cutoff_clean_2026-05-29/summary.json",
+      "sha256": "85bca64075cacf0cf9ef584765a8c40f87df1a9314504e64a13652571006fb8a",
+      "all_pre_reg_pass": false
+    },
+    "summary_v2": {
+      "path": "data/research/backtests/cutoff_clean_2026-05-29/summary_v2.json",
+      "sha256": "c20057ec77f8f9c44ae4dd575503c31a7d236f5b32d29c434c5ba018760f7798",
+      "diagnostic_pass_rate": "4/4"
+    },
+    "summary_v3": {
+      "path": "data/research/backtests/cutoff_clean_2026-05-29/summary_v3.json",
+      "sha256": "29f32ffa133611271445f0e35068b0f7dbdb084d6f168b09dd009fc402c33084",
+      "diagnostic_pass_rate": "4/5"
+    }
+  },
+  "diagnostics_v4": {
+    "step_19_leakage_curve": {
+      "sha256": "3cac10a95a4c3ed0b368dfa964eb16e765f52fa57c98ba3e58a3029f497994ac",
+      "n_windows": 7,
+      "window_len_days": 14,
+      "opus_monotone_increasing": false,
+      "opus_monotone_decreasing": false,
+      "opus_paired_deltas": [
+        0.027718,
+        -0.113327,
+        0.098165,
+        0.076038,
+        -0.095136,
+        0.017729
+      ],
+      "max_window_to_window_jump_opus": 0.113327,
+      "interpretation_summary": "Opus Brier is non-monotone over windows — degradation is event-driven or noisy, not a smooth gradient.",
+      "verdict": "Step 10 Feb→Mar Brier asymmetry is NOT a smooth temporal gradient. Across 7 overlapping 14d windows the Opus paired Brier swings both directions (e.g. late-Apr window n=58 resurges to Brier 0.082, edge -0.135 vs market). This argues against a monotone cutoff-leakage model in favor of cluster-/event-driven degradation. NOT a leakage elimination claim — Step 17 forward protocol is still required."
+    },
+    "step_20_leakage_curve_sensitivity": {
+      "sha256": "290fe42549f9ae1a4d90377aef89db2950bd1f7ab9018efe81576c28a0f7cce5",
+      "window_sizes_tested": [
+        7,
+        14,
+        21
+      ],
+      "verdicts_summary": {
+        "7": "non_monotone",
+        "14": "non_monotone",
+        "21": "non_monotone"
+      },
+      "n_non_monotone_of_3": 3,
+      "finding_robust": true,
+      "interpretation_summary": "Non-monotone pattern holds at 3/3 window sizes — Step 19's finding is NOT a 14d artifact. Opus Brier degradation over time is genuinely cluster-driven, not a smooth cutoff-leakage gradient.",
+      "verdict": "Step 19's non-monotone pattern holds at 3/3 window sizes (7d / 14d / 21d, non-overlapping stride). Not a 14d-stride artifact. Sign-flip counts: 7d=5, 14d=2, 21d=2 — consistent with cluster-driven noise rather than smooth gradient. Robustness check PASSES."
+    }
+  },
+  "diagnostic_verdict_v4": {
+    "n_pass": 4,
+    "n_total": 4,
+    "all_pass": true,
+    "details": {
+      "step19_yielded_at_least_5_windows": true,
+      "step19_opus_brier_non_monotone": true,
+      "step20_finding_robust_to_window_size": true,
+      "step20_n_non_monotone_at_least_2_of_3": true
+    }
+  },
+  "alpha_identity_statement_v4": "Adds diagnostic specificity to v3: the Feb→Mar Brier asymmetry that originally raised cutoff-leakage suspicion is NOT a smooth temporal decay — it is cluster-/event-driven, robust across {7d, 14d, 21d} window sizes. This narrows but does not eliminate leakage risk. The structural elimination (Step 17 forward protocol, register_at = 2026-05-30T00:00:00Z) remains the only mechanism that makes outcomes truly OOS w.r.t. Opus 4.7's January 2026 cutoff. Status: paper-only. v4 does NOT promote to Nostr/IPFS.",
+  "honest_caveats_v4": [
+    "Non-monotone Brier curve does NOT rule out leakage — it only argues against the smooth-temporal-gradient model. Cluster-driven degradation is fully compatible with category-/event-specific leakage.",
+    "Step 19 windows were sliced on closedTime from the same v1 cohort — this is descriptive, not orthogonal evidence.",
+    "Step 20 non-overlapping stride reduces redundancy vs Step 19 but uses the same underlying paired observations.",
+    "Small windows (n_paired < 10) yield unstable Brier estimates — the late-Apr resurgence (n=58) is a real observation, but single windows at boundary sample sizes warrant skepticism.",
+    "The Step 17 forward protocol remains the only structural leakage elimination mechanism. Steps 19-20 are diagnostics ABOUT the leakage model, not a substitute for OOS validation.",
+    "PAPER-ONLY persists. v4 does NOT promote to Nostr/IPFS.",
+    "Live-capital decision requires `debate --critique` per global rule."
+  ]
+}
