@@ -1,0 +1,279 @@
+{
+  "experiment": "cutoff_clean_2026-05-29",
+  "analysis": "calibration_deepdive",
+  "generated_at": "2026-05-29T04:44:51.107251Z",
+  "n_total": 390,
+  "bin_count": 10,
+  "bins": [
+    {
+      "bin_idx": 0,
+      "interval": [
+        0.0,
+        0.1
+      ],
+      "n_obs": 225,
+      "n_paired": 163,
+      "mean_predicted_opus": 0.0302,
+      "actual_win_rate": 0.0267,
+      "calibration_gap": 0.0036,
+      "mean_market_prior": 0.2606,
+      "n_bets_placed": 118,
+      "n_bet_winners": 114,
+      "bet_win_rate": 0.9661,
+      "mean_bet_net_pnl": 261.0694,
+      "total_bet_net_pnl": 30806.19,
+      "mean_ev_naive": 0.4448,
+      "brier_opus": 0.025529,
+      "brier_market": 0.111733,
+      "calibration_quality": "well_calibrated"
+    },
+    {
+      "bin_idx": 1,
+      "interval": [
+        0.1,
+        0.2
+      ],
+      "n_obs": 45,
+      "n_paired": 36,
+      "mean_predicted_opus": 0.1313,
+      "actual_win_rate": 0.1333,
+      "calibration_gap": -0.002,
+      "mean_market_prior": 0.3178,
+      "n_bets_placed": 30,
+      "n_bet_winners": 24,
+      "bet_win_rate": 0.8,
+      "mean_bet_net_pnl": 140.1535,
+      "total_bet_net_pnl": 4204.61,
+      "mean_ev_naive": 0.5926,
+      "brier_opus": 0.115616,
+      "brier_market": 0.155311,
+      "calibration_quality": "well_calibrated"
+    },
+    {
+      "bin_idx": 2,
+      "interval": [
+        0.2,
+        0.3
+      ],
+      "n_obs": 27,
+      "n_paired": 23,
+      "mean_predicted_opus": 0.2178,
+      "actual_win_rate": 0.4444,
+      "calibration_gap": -0.2267,
+      "mean_market_prior": 0.3467,
+      "n_bets_placed": 19,
+      "n_bet_winners": 8,
+      "bet_win_rate": 0.4211,
+      "mean_bet_net_pnl": -110.9227,
+      "total_bet_net_pnl": -2107.53,
+      "mean_ev_naive": 2.6965,
+      "brier_opus": 0.299089,
+      "brier_market": 0.264512,
+      "calibration_quality": "miscalibrated"
+    },
+    {
+      "bin_idx": 3,
+      "interval": [
+        0.3,
+        0.4
+      ],
+      "n_obs": 21,
+      "n_paired": 15,
+      "mean_predicted_opus": 0.3167,
+      "actual_win_rate": 0.0952,
+      "calibration_gap": 0.2214,
+      "mean_market_prior": 0.3723,
+      "n_bets_placed": 12,
+      "n_bet_winners": 6,
+      "bet_win_rate": 0.5,
+      "mean_bet_net_pnl": -219.0551,
+      "total_bet_net_pnl": -2628.66,
+      "mean_ev_naive": 0.3757,
+      "brier_opus": 0.1293,
+      "brier_market": 0.165025,
+      "calibration_quality": "miscalibrated"
+    },
+    {
+      "bin_idx": 4,
+      "interval": [
+        0.4,
+        0.5
+      ],
+      "n_obs": 22,
+      "n_paired": 18,
+      "mean_predicted_opus": 0.4259,
+      "actual_win_rate": 0.4545,
+      "calibration_gap": -0.0286,
+      "mean_market_prior": 0.4394,
+      "n_bets_placed": 13,
+      "n_bet_winners": 6,
+      "bet_win_rate": 0.4615,
+      "mean_bet_net_pnl": -52.1684,
+      "total_bet_net_pnl": -678.19,
+      "mean_ev_naive": 0.7928,
+      "brier_opus": 0.248359,
+      "brier_market": 0.217989,
+      "calibration_quality": "well_calibrated"
+    },
+    {
+      "bin_idx": 5,
+      "interval": [
+        0.5,
+        0.6
+      ],
+      "n_obs": 28,
+      "n_paired": 22,
+      "mean_predicted_opus": 0.5268,
+      "actual_win_rate": 0.5,
+      "calibration_gap": 0.0268,
+      "mean_market_prior": 0.4384,
+      "n_bets_placed": 20,
+      "n_bet_winners": 7,
+      "bet_win_rate": 0.35,
+      "mean_bet_net_pnl": 61.7967,
+      "total_bet_net_pnl": 1235.93,
+      "mean_ev_naive": 0.8728,
+      "brier_opus": 0.245982,
+      "brier_market": 0.204776,
+      "calibration_quality": "well_calibrated"
+    },
+    {
+      "bin_idx": 6,
+      "interval": [
+        0.6,
+        0.7
+      ],
+      "n_obs": 8,
+      "n_paired": 8,
+      "mean_predicted_opus": 0.6338,
+      "actual_win_rate": 0.5,
+      "calibration_gap": 0.1338,
+      "mean_market_prior": 0.595,
+      "n_bets_placed": 7,
+      "n_bet_winners": 1,
+      "bet_win_rate": 0.1429,
+      "mean_bet_net_pnl": -623.3267,
+      "total_bet_net_pnl": -4363.29,
+      "mean_ev_naive": 0.4122,
+      "brier_opus": 0.272113,
+      "brier_market": 0.19155,
+      "calibration_quality": "moderately_calibrated"
+    },
+    {
+      "bin_idx": 7,
+      "interval": [
+        0.7,
+        0.8
+      ],
+      "n_obs": 3,
+      "n_paired": 3,
+      "mean_predicted_opus": 0.76,
+      "actual_win_rate": 0.3333,
+      "calibration_gap": 0.4267,
+      "mean_market_prior": 0.5983,
+      "n_bets_placed": 2,
+      "n_bet_winners": 1,
+      "bet_win_rate": 0.5,
+      "mean_bet_net_pnl": -5.5705,
+      "total_bet_net_pnl": -11.14,
+      "mean_ev_naive": 0.4265,
+      "brier_opus": 0.411133,
+      "brier_market": 0.377342,
+      "calibration_quality": "miscalibrated"
+    },
+    {
+      "bin_idx": 8,
+      "interval": [
+        0.8,
+        0.9
+      ],
+      "n_obs": 8,
+      "n_paired": 8,
+      "mean_predicted_opus": 0.8538,
+      "actual_win_rate": 0.75,
+      "calibration_gap": 0.1038,
+      "mean_market_prior": 0.6506,
+      "n_bets_placed": 8,
+      "n_bet_winners": 6,
+      "bet_win_rate": 0.75,
+      "mean_bet_net_pnl": 4.9126,
+      "total_bet_net_pnl": 39.3,
+      "mean_ev_naive": 0.5346,
+      "brier_opus": 0.204212,
+      "brier_market": 0.161791,
+      "calibration_quality": "moderately_calibrated"
+    },
+    {
+      "bin_idx": 9,
+      "interval": [
+        0.9,
+        1.0
+      ],
+      "n_obs": 3,
+      "n_paired": 3,
+      "mean_predicted_opus": 0.9333,
+      "actual_win_rate": 1,
+      "calibration_gap": -0.0667,
+      "mean_market_prior": 0.83,
+      "n_bets_placed": 2,
+      "n_bet_winners": 2,
+      "bet_win_rate": 1.0,
+      "mean_bet_net_pnl": 55.9252,
+      "total_bet_net_pnl": 111.85,
+      "mean_ev_naive": 0.345,
+      "brier_opus": 0.0048,
+      "brier_market": 0.04035,
+      "calibration_quality": "moderately_calibrated"
+    }
+  ],
+  "global_metrics": {
+    "ece_sample_weighted": 0.042131,
+    "mce_max_bin_gap": 0.4267,
+    "n_paired_total": 299
+  },
+  "profitability_by_bin": {
+    "profitable_bin_intervals": [
+      [
+        0.0,
+        0.1
+      ],
+      [
+        0.1,
+        0.2
+      ],
+      [
+        0.5,
+        0.6
+      ],
+      [
+        0.8,
+        0.9
+      ]
+    ],
+    "unprofitable_bin_intervals": [
+      [
+        0.2,
+        0.3
+      ],
+      [
+        0.3,
+        0.4
+      ],
+      [
+        0.4,
+        0.5
+      ],
+      [
+        0.6,
+        0.7
+      ]
+    ]
+  },
+  "caveats": [
+    "Small-bin reliability is high-variance — bins with n_obs<10 should not drive sizing.",
+    "Tail bins (0.0-0.1 and 0.9-1.0) often have few observations because Opus rarely places extreme probabilities.",
+    "ECE conflates over- and under-confidence; check sign of calibration_gap per bin separately.",
+    "EV is naive (no fees/slip); P&L is realized with 2% fee + 1% slip; they should agree directionally but differ in magnitude."
+  ],
+  "interpretation_hint": "Use this to inform Step 16 (bin-aware sizing): scale Kelly stake by max(0, 1 - |calibration_gap|/0.1) so well-calibrated bins get full Kelly and miscalibrated bins get heavily discounted stakes."
+}
