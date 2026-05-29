@@ -1,0 +1,58 @@
+{
+  "experiment": "cutoff_clean_2026-05-29",
+  "analysis": "leakage_stress_test",
+  "generated_at": "2026-05-29T04:09:24.918848Z",
+  "hypothesis": "If Jan-cutoff leakage inflates Opus's edge in early-Feb resolutions, restricting cohort to closedTime ≥ 2026-03-01 should attenuate the edge.",
+  "sub_cohorts": {
+    "full": {
+      "n_total": 390,
+      "n_paired": 299,
+      "brier_opus_all": 0.100377,
+      "brier_naive_all": 0.25,
+      "brier_opus_paired": 0.108483,
+      "brier_market_paired": 0.150072,
+      "opus_win_rate": 0.7324,
+      "mean_loss_diff": -0.041589,
+      "stdev_loss_diff": 0.170191,
+      "t_statistic": -4.2255,
+      "p_two_sided_normal": 2.4e-05
+    },
+    "feb_only": {
+      "n_total": 93,
+      "n_paired": 62,
+      "brier_opus_all": 0.082289,
+      "brier_naive_all": 0.25,
+      "brier_opus_paired": 0.096476,
+      "brier_market_paired": 0.144311,
+      "opus_win_rate": 0.7419,
+      "mean_loss_diff": -0.047835,
+      "stdev_loss_diff": 0.164774,
+      "t_statistic": -2.2859,
+      "p_two_sided_normal": 0.02226
+    },
+    "mar_plus": {
+      "n_total": 297,
+      "n_paired": 237,
+      "brier_opus_all": 0.106041,
+      "brier_naive_all": 0.25,
+      "brier_opus_paired": 0.111624,
+      "brier_market_paired": 0.151579,
+      "opus_win_rate": 0.73,
+      "mean_loss_diff": -0.039955,
+      "stdev_loss_diff": 0.171883,
+      "t_statistic": -3.5786,
+      "p_two_sided_normal": 0.000345
+    }
+  },
+  "leak_diagnostic": {
+    "delta_brier_opus_mar_minus_feb": 0.0238,
+    "delta_brier_market_mar_minus_feb": 0.0073,
+    "opus_only_degrades_in_march": true,
+    "interpretation": "Opus brier worsens by +0.0238 from Feb→Mar; market brier moves by +0.0073. Asymmetric degradation suggests possible leakage."
+  },
+  "caveats": [
+    "Feb sub-cohort dominated by sports (NBA/NFL/etc.) with short resolution windows; March+ skews different categories.",
+    "Sub-cohort sizes differ (n_paired) — compare with that in mind.",
+    "A null result does NOT prove no leakage; it just bounds detectable magnitude."
+  ]
+}

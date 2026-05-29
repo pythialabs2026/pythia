@@ -1,0 +1,89 @@
+{
+  "experiment": "cutoff_clean_2026-05-29",
+  "analysis": "kelly_cap_sensitivity",
+  "generated_at": "2026-05-29T04:10:59.505224Z",
+  "edge_threshold": 0.05,
+  "fee": 0.02,
+  "slippage": 0.01,
+  "bankroll_start": 1000.0,
+  "stake_caps_tested": [
+    0.01,
+    0.02,
+    0.05,
+    0.1,
+    0.2
+  ],
+  "sweep": [
+    {
+      "stake_cap": 0.01,
+      "n_bets": 231,
+      "n_winners": 175,
+      "win_rate": 0.7576,
+      "n_capped": 231,
+      "cap_bind_rate": 1.0,
+      "final_nav": 2056.06,
+      "roi": 1.05606,
+      "sharpe_daily": 5.4068,
+      "max_drawdown": 0.0273
+    },
+    {
+      "stake_cap": 0.02,
+      "n_bets": 231,
+      "n_winners": 175,
+      "win_rate": 0.7576,
+      "n_capped": 231,
+      "cap_bind_rate": 1.0,
+      "final_nav": 4099.01,
+      "roi": 3.099013,
+      "sharpe_daily": 5.1594,
+      "max_drawdown": 0.0551
+    },
+    {
+      "stake_cap": 0.05,
+      "n_bets": 231,
+      "n_winners": 175,
+      "win_rate": 0.7576,
+      "n_capped": 231,
+      "cap_bind_rate": 1.0,
+      "final_nav": 27609.07,
+      "roi": 26.609071,
+      "sharpe_daily": 4.4422,
+      "max_drawdown": 0.1408
+    },
+    {
+      "stake_cap": 0.1,
+      "n_bets": 231,
+      "n_winners": 175,
+      "win_rate": 0.7576,
+      "n_capped": 218,
+      "cap_bind_rate": 0.9437,
+      "final_nav": 419481.51,
+      "roi": 418.481512,
+      "sharpe_daily": 3.5453,
+      "max_drawdown": 0.2366
+    },
+    {
+      "stake_cap": 0.2,
+      "n_bets": 231,
+      "n_winners": 175,
+      "win_rate": 0.7576,
+      "n_capped": 193,
+      "cap_bind_rate": 0.8355,
+      "final_nav": 20578154.02,
+      "roi": 20577.15402,
+      "sharpe_daily": 2.8671,
+      "max_drawdown": 0.4846
+    }
+  ],
+  "reference_5pct_check": {
+    "final_nav": 27609.07,
+    "matches_locked_summary": true
+  },
+  "interpretation": "Lower caps → tighter risk, lower NAV but possibly higher risk-adjusted return. Higher caps → more leverage on Kelly's ideal sizing if it's accurate, or amplified blowup if it's not.",
+  "caveats": [
+    "Sweep is in-sample — same cohort, same prices, only sizing differs. NO new data.",
+    "All paths assume identical CLOB execution; real fills would diverge by cap (size impact).",
+    "Sharpe computed on calendar-day NAV samples taken at last bet of each day.",
+    "Original locked run used 5% — only that single number is the 박제 result."
+  ]
+}

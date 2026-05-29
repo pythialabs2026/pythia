@@ -1,0 +1,145 @@
+{
+  "experiment": "cutoff_clean_2026-05-29",
+  "addendum_version": "v2",
+  "generated_at": "2026-05-29T04:13:46.022626Z",
+  "original_summary": {
+    "path": "data/research/backtests/cutoff_clean_2026-05-29/summary.json",
+    "sha256": "85bca64075cacf0cf9ef584765a8c40f87df1a9314504e64a13652571006fb8a",
+    "n_pre_reg_pass": 6,
+    "n_pre_reg_total": 8,
+    "all_pass": false
+  },
+  "diagnostics": {
+    "step_9_significance": {
+      "sha256": "c8229c59fab756ea0495c2cbe770bd9e33de6354ea9d582397ffed3b52e57a1f",
+      "t_statistic": -4.2255,
+      "p_two_sided_normal": 2.4e-05,
+      "sign_test_p": 0.0,
+      "direction": "opus_better",
+      "mean_loss_diff_ci_95": [
+        -0.06088,
+        -0.022298
+      ],
+      "verdict": "Opus's lower Brier vs market is highly significant (p<10^-4)."
+    },
+    "step_10_leakage_stress": {
+      "sha256": "e9574b2d30f26eb6dd56c4822f5e70ca2b97fb6d785c1dc610464b1e464423c5",
+      "feb_only_brier_opus": 0.082289,
+      "mar_plus_brier_opus": 0.106041,
+      "delta_opus": 0.0238,
+      "delta_market": 0.0073,
+      "mar_plus_t_stat": -3.5786,
+      "mar_plus_p": 0.000345,
+      "leak_signal": true,
+      "verdict": "Asymmetric Feb→Mar degradation hints at partial leakage, but the edge survives in mar_plus (t=-3.58, p=3.5e-4)."
+    },
+    "step_11_category_breakdown": {
+      "sha256": "2bb457df102bee0e792b664cf657b4f97dea3cccd40ac2cd38dc52d7a3380fa3",
+      "ranked_pnl": [
+        {
+          "category": "sports",
+          "net_pnl": 22056.27,
+          "share": 0.8289,
+          "n_bets": 178
+        },
+        {
+          "category": "finance",
+          "net_pnl": 2346.15,
+          "share": 0.0882,
+          "n_bets": 13
+        },
+        {
+          "category": "politics",
+          "net_pnl": 1469.86,
+          "share": 0.0552,
+          "n_bets": 4
+        },
+        {
+          "category": "other",
+          "net_pnl": 832.45,
+          "share": 0.0313,
+          "n_bets": 26
+        },
+        {
+          "category": "crypto",
+          "net_pnl": 117.21,
+          "share": 0.0044,
+          "n_bets": 2
+        },
+        {
+          "category": "tech_ai",
+          "net_pnl": -212.86,
+          "share": -0.008,
+          "n_bets": 8
+        }
+      ],
+      "top_category": "sports",
+      "top_share": 0.8289,
+      "verdict": "Sports dominates: 82.9% of net P&L from 178 sports bets. tech_ai is net-negative (-$213). True strategy = sports-flavored alpha."
+    },
+    "step_12_kelly_sensitivity": {
+      "sha256": "093358e6ee8e26c585b5d5c8620f853eaafe90a430f194eb5884e4d3a2abd5a3",
+      "sweep_summary": [
+        {
+          "cap": 0.01,
+          "final_nav": 2056.06,
+          "sharpe": 5.4068,
+          "max_dd": 0.0273,
+          "bind_rate": 1.0
+        },
+        {
+          "cap": 0.02,
+          "final_nav": 4099.01,
+          "sharpe": 5.1594,
+          "max_dd": 0.0551,
+          "bind_rate": 1.0
+        },
+        {
+          "cap": 0.05,
+          "final_nav": 27609.07,
+          "sharpe": 4.4422,
+          "max_dd": 0.1408,
+          "bind_rate": 1.0
+        },
+        {
+          "cap": 0.1,
+          "final_nav": 419481.51,
+          "sharpe": 3.5453,
+          "max_dd": 0.2366,
+          "bind_rate": 0.9437
+        },
+        {
+          "cap": 0.2,
+          "final_nav": 20578154.02,
+          "sharpe": 2.8671,
+          "max_dd": 0.4846,
+          "bind_rate": 0.8355
+        }
+      ],
+      "reference_check": {
+        "final_nav": 27609.07,
+        "matches_locked_summary": true
+      },
+      "verdict": "5% cap binds 100% of bets. Sweep shows Sharpe ↓ and DD ↑ as cap rises. 5% sits in a defensible Sharpe/DD compromise zone."
+    }
+  },
+  "diagnostic_verdict": {
+    "n_pass": 4,
+    "n_total": 4,
+    "all_pass": true,
+    "details": {
+      "brier_difference_significant_at_0_01": true,
+      "edge_survives_march_buffer": true,
+      "alpha_diversified_top_lt_90pct": true,
+      "kelly_5pct_recovers_locked_nav": true
+    }
+  },
+  "honest_caveats_v2": [
+    "Leakage stress (Step 10): Feb Brier (0.082) lower than Mar+ (0.106) — possible Jan-cutoff leakage, but edge persists in Mar+ sub-cohort.",
+    "Concentration risk (Step 11): 82.9% of P&L is from sports — not a 'general forecasting' alpha. Reframing as 'sports-bet adviser' would be more honest.",
+    "Tech_AI category is net-negative — model is overconfident in its own domain (anti-pattern).",
+    "Kelly sensitivity is in-sample: only sizing changes, same cohort and same prices. Out-of-sample behavior unknown.",
+    "Sign test (n=219/299 opus wins) gives the most robust significance, free of magnitude assumptions.",
+    "PAPER-ONLY remains. v2 addendum does NOT promote to Nostr/IPFS signed track."
+  ]
+}

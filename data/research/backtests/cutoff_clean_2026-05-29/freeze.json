@@ -64,6 +64,36 @@
       "path": "data/research/backtests/cutoff_clean_2026-05-29/calibration.txt",
       "sha256": "50514d0d56d83f2979094098312cadc56f78de2b19536c0eba76b80a1322a4cd",
       "bytes": 2620
+    },
+    {
+      "label": "significance_test_v2",
+      "path": "data/research/backtests/cutoff_clean_2026-05-29/significance_test.json",
+      "sha256": "c8229c59fab756ea0495c2cbe770bd9e33de6354ea9d582397ffed3b52e57a1f",
+      "bytes": 1294
+    },
+    {
+      "label": "leakage_stress_v2",
+      "path": "data/research/backtests/cutoff_clean_2026-05-29/leakage_stress_test.json",
+      "sha256": "e9574b2d30f26eb6dd56c4822f5e70ca2b97fb6d785c1dc610464b1e464423c5",
+      "bytes": 2058
+    },
+    {
+      "label": "category_breakdown_v2",
+      "path": "data/research/backtests/cutoff_clean_2026-05-29/category_breakdown.json",
+      "sha256": "2bb457df102bee0e792b664cf657b4f97dea3cccd40ac2cd38dc52d7a3380fa3",
+      "bytes": 4050
+    },
+    {
+      "label": "kelly_sensitivity_v2",
+      "path": "data/research/backtests/cutoff_clean_2026-05-29/kelly_sensitivity.json",
+      "sha256": "093358e6ee8e26c585b5d5c8620f853eaafe90a430f194eb5884e4d3a2abd5a3",
+      "bytes": 2359
+    },
+    {
+      "label": "summary_v2",
+      "path": "data/research/backtests/cutoff_clean_2026-05-29/summary_v2.json",
+      "sha256": "c20057ec77f8f9c44ae4dd575503c31a7d236f5b32d29c434c5ba018760f7798",
+      "bytes": 4714
     }
   ],
   "git_witness": {
@@ -76,7 +106,8 @@
     "predictions.jsonl + baseline_prices.jsonl + summary.json artifacts will be added in addendum freeze block after Opus prediction step.",
     "Knowledge-cutoff safety: closedTime >= 2026-02-01 buffers Opus 4.7 cutoff (January 2026).",
     "Track is paper-only research. Not IPFS pinned, not Nostr signed.",
-    "Addendum 2026-05-29: predictions/baseline/brier/pnl/nav/summary/calibration sealed."
+    "Addendum 2026-05-29: predictions/baseline/brier/pnl/nav/summary/calibration sealed.",
+    "Addendum v2 2026-05-29: significance_test + leakage_stress + category_breakdown + kelly_sensitivity + summary_v2 sealed."
   ],
   "addendum_frozen_at_utc": "2026-05-29T04:02:40.635141Z",
   "git_witness_addendum": {
@@ -85,5 +116,6 @@
     "remote": "git@github.com:pythialabs2026/pythia.git",
     "pushed_at_utc": "2026-05-29T04:03:13Z",
     "anchors": "predictions + baseline + brier + pnl + nav + summary + calibration"
-  }
+  },
+  "addendum_v2_frozen_at_utc": "2026-05-29T04:13:46.023539Z"
 }

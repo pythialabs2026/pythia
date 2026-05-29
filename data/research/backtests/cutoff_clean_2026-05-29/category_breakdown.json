@@ -1,0 +1,151 @@
+{
+  "experiment": "cutoff_clean_2026-05-29",
+  "analysis": "category_breakdown",
+  "generated_at": "2026-05-29T04:10:23.454244Z",
+  "rules": "regex-based slug+question matching (sports → crypto → politics → finance → entertainment → tech_ai → other)",
+  "categories": {
+    "crypto": {
+      "n_total": 2,
+      "n_paired": 2,
+      "brier_opus_all": 0.0194,
+      "brier_opus_paired": 0.0194,
+      "brier_market_paired": 0.1642,
+      "opus_win_rate": 1.0,
+      "n_bets": 2,
+      "n_winners": 2,
+      "bet_win_rate": 1.0,
+      "total_stake": 244.86,
+      "total_net_pnl": 117.21,
+      "pnl_share_of_total": 0.0044,
+      "pnl_per_dollar_staked": 0.4787
+    },
+    "finance": {
+      "n_total": 20,
+      "n_paired": 20,
+      "brier_opus_all": 0.112075,
+      "brier_opus_paired": 0.112075,
+      "brier_market_paired": 0.176455,
+      "opus_win_rate": 0.8,
+      "n_bets": 13,
+      "n_winners": 11,
+      "bet_win_rate": 0.8462,
+      "total_stake": 3694.23,
+      "total_net_pnl": 2346.15,
+      "pnl_share_of_total": 0.0882,
+      "pnl_per_dollar_staked": 0.6351
+    },
+    "other": {
+      "n_total": 37,
+      "n_paired": 33,
+      "brier_opus_all": 0.156938,
+      "brier_opus_paired": 0.175867,
+      "brier_market_paired": 0.201737,
+      "opus_win_rate": 0.7273,
+      "n_bets": 26,
+      "n_winners": 19,
+      "bet_win_rate": 0.7308,
+      "total_stake": 2980.69,
+      "total_net_pnl": 832.45,
+      "pnl_share_of_total": 0.0313,
+      "pnl_per_dollar_staked": 0.2793
+    },
+    "politics": {
+      "n_total": 20,
+      "n_paired": 10,
+      "brier_opus_all": 0.081585,
+      "brier_opus_paired": 0.02124,
+      "brier_market_paired": 0.070327,
+      "opus_win_rate": 0.7,
+      "n_bets": 4,
+      "n_winners": 2,
+      "bet_win_rate": 0.5,
+      "total_stake": 1229.72,
+      "total_net_pnl": 1469.86,
+      "pnl_share_of_total": 0.0552,
+      "pnl_per_dollar_staked": 1.1953
+    },
+    "sports": {
+      "n_total": 299,
+      "n_paired": 222,
+      "brier_opus_all": 0.092987,
+      "brier_opus_paired": 0.101418,
+      "brier_market_paired": 0.145886,
+      "opus_win_rate": 0.7342,
+      "n_bets": 178,
+      "n_winners": 137,
+      "bet_win_rate": 0.7697,
+      "total_stake": 107215.98,
+      "total_net_pnl": 22056.27,
+      "pnl_share_of_total": 0.8289,
+      "pnl_per_dollar_staked": 0.2057
+    },
+    "tech_ai": {
+      "n_total": 12,
+      "n_paired": 12,
+      "brier_opus_all": 0.13545,
+      "brier_opus_paired": 0.13545,
+      "brier_market_paired": 0.105555,
+      "opus_win_rate": 0.5833,
+      "n_bets": 8,
+      "n_winners": 4,
+      "bet_win_rate": 0.5,
+      "total_stake": 852.45,
+      "total_net_pnl": -212.86,
+      "pnl_share_of_total": -0.008,
+      "pnl_per_dollar_staked": -0.2497
+    }
+  },
+  "totals": {
+    "n_markets": 390,
+    "n_bets": 231,
+    "total_stake": 116217.93,
+    "total_net_pnl": 26609.07
+  },
+  "alpha_attribution": {
+    "ranked_by_net_pnl": [
+      {
+        "category": "sports",
+        "net_pnl": 22056.27,
+        "share": 0.8289,
+        "n_bets": 178
+      },
+      {
+        "category": "finance",
+        "net_pnl": 2346.15,
+        "share": 0.0882,
+        "n_bets": 13
+      },
+      {
+        "category": "politics",
+        "net_pnl": 1469.86,
+        "share": 0.0552,
+        "n_bets": 4
+      },
+      {
+        "category": "other",
+        "net_pnl": 832.45,
+        "share": 0.0313,
+        "n_bets": 26
+      },
+      {
+        "category": "crypto",
+        "net_pnl": 117.21,
+        "share": 0.0044,
+        "n_bets": 2
+      },
+      {
+        "category": "tech_ai",
+        "net_pnl": -212.86,
+        "share": -0.008,
+        "n_bets": 8
+      }
+    ],
+    "top_category_concentration": 0.8289
+  },
+  "caveats": [
+    "Keyword classifier is coarse; misclassifications expected.",
+    "Categories not mutually balanced — sport-heavy cohort means sports stats dominate.",
+    "Order matters: first matching rule wins (sports tested first to catch league names).",
+    "'other' bucket likely contains genuinely unclassified, not all noise."
+  ]
+}

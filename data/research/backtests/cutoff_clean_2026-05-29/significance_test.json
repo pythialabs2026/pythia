@@ -1,0 +1,37 @@
+{
+  "experiment": "cutoff_clean_2026-05-29",
+  "test": "diebold_mariano_paired_brier",
+  "generated_at": "2026-05-29T04:08:53.517820Z",
+  "n_paired": 299,
+  "loss_differential": {
+    "definition": "d_i = brier_opus_i - brier_market_i  (negative ⇒ opus better)",
+    "mean_d": -0.041589,
+    "stdev_d": 0.170191,
+    "se_d": 0.009842,
+    "ci_95_normal": [
+      -0.06088,
+      -0.022298
+    ]
+  },
+  "dm_test": {
+    "t_statistic": -4.2255,
+    "df_for_t": 298,
+    "p_two_sided_normal": 2.4e-05,
+    "p_two_sided_t_approx": 0.0,
+    "significant_at_0_05": true,
+    "significant_at_0_01": true,
+    "direction": "opus_better"
+  },
+  "sign_test": {
+    "opus_better_count": 219,
+    "market_better_count": 80,
+    "p_two_sided_exact_binomial": 0.0
+  },
+  "interpretation": "Mean(d)=-0.0416 with SE=0.0098, t=-4.23 on df=298. Two-sided normal p=2.38e-05. Reject H0 at α=0.05; direction = opus_better. Sign test: opus better on 219/299, p=4.21e-16.",
+  "caveats": [
+    "Brier loss differentials are NOT i.i.d. across markets — heterogeneity is large.",
+    "DM was designed for forecast horizons; we apply it cross-sectionally. Treat p-value as a guide, not gospel.",
+    "Sign test is robust to outliers but ignores magnitudes.",
+    "Survivorship: only resolved markets included."
+  ]
+}
