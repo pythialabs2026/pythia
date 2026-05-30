@@ -30,6 +30,9 @@ class Prediction(BaseModel):
     rationale_hash: str = Field(description="sha256 of full LLM reasoning (stored in logs/agent/)")
     ipfs_cid: str | None = None
     x_tweet_id: str | None = None
+    nostr_event_id: str | None = None
+    nostr_pubkey: str | None = None
+    nostr_relays_accepted: int | None = None
     resolve_at: datetime
     status: PredictionStatus = PredictionStatus.PENDING
     outcome: Literal["yes", "no", "invalid"] | None = None
