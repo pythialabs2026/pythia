@@ -44,3 +44,18 @@ venv/
 .idea/
 .DS_Store
 Thumbs.db
+
+# ---- stoa ----
+stoa/stoa.db
+stoa/server.log
+stoa/master.key
+stoa/oracle.tailde4a99.ts.net.crt
+stoa/oracle.tailde4a99.ts.net.key
+stoa/push_keys.json
+stoa/push_subs.json
+
+# ---- ploy_quant ----
+ploy_quant/data/
+ploy_quant/runtime/
+ploy_quant/logs/
+ploy_quant/secrets/
