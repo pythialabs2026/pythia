@@ -1063,6 +1063,95 @@ def api_bot_status() -> Dict[str, Any]:
         return {"ok": False, "why": f"bot_status read failed: {exc}"}
 
 
+# ---------------------------------------------------------------------------
+# Pythia Quant API
+# ---------------------------------------------------------------------------
+@app.get("/api/quant/base_rate")
+def api_quant_base_rate(
+    ticker: str = Query(..., description="Stock ticker (e.g. AAPL)"),
+    event: str = Query(..., description="Event type (2.02, 1.01, 2.01, 5.02, earnings)"),
+    cutoff: Optional[str] = Query(None, description="Cutoff datetime YYYY-MM-DD")
+) -> Dict[str, Any]:
+    try:
+        import sys
+        sys.modules.pop('code', None)
+        if str(STRATEGY_DIR) not in sys.path:
+            sys.path.insert(0, str(STRATEGY_DIR))
+        
+        from code.research.equity_base_rate import calculate_base_rate
+        
+        cutoff_str = cutoff or datetime.now(timezone.utc).isoformat()
+        res = calculate_base_rate(ticker, event, cutoff_str)
+        return res
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}: {exc}"}
+
+
+@app.get("/api/quant/status")
+def api_quant_status() -> Dict[str, Any]:
+    try:
+        freeze_path = STRATEGY_DIR / "data" / "research" / "backtests" / "oos_forward_2026-05-30" / "freeze.json"
+        results_path = STRATEGY_DIR / "data" / "research" / "backtests" / "oos_forward_2026-05-30" / "oos_forward_results.json"
+        
+        freeze_data = {}
+        if freeze_path.is_file():
+            with freeze_path.open("r", encoding="utf-8") as f:
+                freeze_data = json.load(f)
+                
+        results_data = {}
+        if results_path.is_file():
+            with results_path.open("r", encoding="utf-8") as f:
+                results_data = json.load(f)
+                
+        return {
+            "status": "success",
+            "has_freeze": freeze_path.is_file(),
+            "has_results": results_path.is_file(),
+            "freeze": freeze_data,
+            "results": results_data,
+        }
+    except Exception as exc:
+        return {"status": "error", "error": f"{type(exc).__name__}: {exc}"}
+
+
+_eval_thread_running = False
+_eval_last_log = ""
+
+def _run_eval_bg():
+    global _eval_thread_running, _eval_last_log
+    _eval_thread_running = True
+    try:
+        script = STRATEGY_DIR / "code" / "research" / "evaluate_oos.py"
+        import sys
+        proc = subprocess.run(
+            [sys.executable, str(script), "--allow-early"],
+            capture_output=True, text=True, cwd=str(STRATEGY_DIR),
+            timeout=180
+        )
+        _eval_last_log = proc.stdout + "\n" + proc.stderr
+    except Exception as exc:
+        _eval_last_log = f"Execution failed: {exc}"
+    finally:
+        _eval_thread_running = False
+
+
+@app.post("/api/quant/run_eval")
+def api_quant_run_eval() -> Dict[str, Any]:
+    global _eval_thread_running, _eval_last_log
+    if _eval_thread_running:
+        return {"status": "running", "msg": "Evaluation is already running in background"}
+    
+    threading.Thread(target=_run_eval_bg, daemon=True).start()
+    return {"status": "started", "msg": "Evaluation started in background"}
+
+
+@app.get("/api/quant/eval_status")
+def api_quant_eval_status() -> Dict[str, Any]:
+    global _eval_thread_running, _eval_last_log
+    return {
+        "running": _eval_thread_running,
+        "log": _eval_last_log
+    }
 
 
 # ---------------------------------------------------------------------------

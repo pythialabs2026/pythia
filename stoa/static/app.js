@@ -1147,6 +1147,150 @@ async function refreshPortfolioOnly() {
   }
 }
 
+// ── Pythia Quant Dashboard Logic ──────────────────────
+async function loadQuantStatus() {
+  try {
+    const r = await fetch("/api/quant/status");
+    const res = await r.json();
+    if (res.status === "success" && res.freeze) {
+      const fr = res.freeze;
+      $("#q-stat-total").innerHTML = `${fr.n_markets} <span style="font-size:0.5em; color:var(--text-mute)">Markets</span>`;
+      
+      const results = res.results || {};
+      const resolved = results.n_resolved_paired || 0;
+      const pending = fr.n_markets - resolved;
+      
+      $("#q-stat-resolved").textContent = resolved;
+      $("#q-stat-pending").textContent = pending;
+    }
+  } catch (e) {
+    console.error("Quant status load error", e);
+  }
+}
+
+let evalPollInterval = null;
+
+async function pollEvalStatus() {
+  const runEvalBtn = document.getElementById("quant-run-eval-btn");
+  try {
+    const r = await fetch("/api/quant/eval_status");
+    const res = await r.json();
+    if (res.log) {
+      $("#quant-log-pre").textContent = res.log;
+      const pre = $("#quant-log-pre");
+      pre.scrollTop = pre.scrollHeight;
+    }
+    if (res.running) {
+      $("#quant-eval-status-text").textContent = "실행 중";
+    } else {
+      clearInterval(evalPollInterval);
+      $("#quant-eval-status-text").textContent = "완료";
+      if (runEvalBtn) {
+        runEvalBtn.disabled = false;
+        runEvalBtn.textContent = "조기 평가 실행";
+      }
+      loadQuantStatus();
+    }
+  } catch (e) {
+    console.error("Poll status error", e);
+  }
+}
+
+function setupQuantEvents() {
+  // Tab switcher binding
+  const dcaBtn = document.getElementById("tab-dca-btn");
+  const quantBtn = document.getElementById("tab-quant-btn");
+  const dcaContent = document.getElementById("dca-content");
+  const quantContent = document.getElementById("quant-content");
+  const footer = document.querySelector("footer.footnote");
+  
+  if (dcaBtn && quantBtn && dcaContent && quantContent) {
+    dcaBtn.addEventListener("click", () => {
+      dcaBtn.classList.add("active");
+      quantBtn.classList.remove("active");
+      dcaContent.style.display = "block";
+      quantContent.style.display = "none";
+      if (footer) footer.style.display = "flex";
+    });
+    quantBtn.addEventListener("click", () => {
+      quantBtn.classList.add("active");
+      dcaBtn.classList.remove("active");
+      dcaContent.style.display = "none";
+      quantContent.style.display = "block";
+      if (footer) footer.style.display = "none"; // quant has no generic footer info
+      loadQuantStatus();
+    });
+  }
+
+  // Base rate calculator binding
+  const calcBtn = document.getElementById("quant-calc-btn");
+  if (calcBtn) {
+    calcBtn.addEventListener("click", async () => {
+      const ticker = document.getElementById("quant-ticker-input").value.trim().toUpperCase();
+      const event = document.getElementById("quant-event-select").value;
+      if (!ticker) return;
+      
+      calcBtn.disabled = true;
+      calcBtn.textContent = "계산 중…";
+      $("#quant-calc-result").style.display = "none";
+      
+      try {
+        const r = await fetch(`/api/quant/base_rate?ticker=${ticker}&event=${event}`);
+        const res = await r.json();
+        calcBtn.disabled = false;
+        calcBtn.textContent = "base-rate 계산";
+        
+        if (res.status === "success") {
+          $("#quant-calc-result").style.display = "block";
+          $("#q-calc-rate").textContent = res.base_rate !== null ? `${(res.base_rate * 100).toFixed(2)}%` : "N/A";
+          $("#q-calc-n").textContent = `${res.n} 건`;
+          
+          let fb = res.fallback || "none";
+          if (fb === "global_no_events") fb = "글로벌 (이벤트 없음)";
+          else if (fb === "global_insufficient_samples") fb = "글로벌 (표본 부족)";
+          else fb = "티커 전용 (정상)";
+          
+          $("#q-calc-fallback").textContent = fb;
+          if (res.sample_start_date) {
+            $("#q-calc-period").textContent = `${res.sample_start_date} ~ ${res.sample_end_date}`;
+          } else {
+            $("#q-calc-period").textContent = "N/A (글로벌 고정값 적용)";
+          }
+        } else {
+          alert("계산 실패: " + (res.error || "알 수 없는 에러"));
+        }
+      } catch (e) {
+        calcBtn.disabled = false;
+        calcBtn.textContent = "base-rate 계산";
+        alert("네트워크 오류: " + e.toString());
+      }
+    });
+  }
+
+  // Run evaluation dry run binding
+  const runEvalBtn = document.getElementById("quant-run-eval-btn");
+  if (runEvalBtn) {
+    runEvalBtn.addEventListener("click", async () => {
+      runEvalBtn.disabled = true;
+      runEvalBtn.textContent = "실행 중…";
+      $("#quant-eval-status-text").textContent = "시작 중";
+      $("#quant-log-section").style.display = "block";
+      $("#quant-log-pre").textContent = "평가 스크립트 실행 중... API outcomes 수집 중 (약 1분 소요)\n";
+      
+      try {
+        await fetch("/api/quant/run_eval", { method: "POST" });
+        if (evalPollInterval) clearInterval(evalPollInterval);
+        evalPollInterval = setInterval(pollEvalStatus, 2000);
+      } catch (e) {
+        runEvalBtn.disabled = false;
+        runEvalBtn.textContent = "조기 평가 실행";
+        $("#quant-eval-status-text").textContent = "에러";
+        $("#quant-log-pre").textContent += `\nError starting evaluation: ${e}`;
+      }
+    });
+  }
+}
+
 window.addEventListener("load", () => {
   // 서비스워커 (PWA 설치)
   if ("serviceWorker" in navigator) {
@@ -1161,6 +1305,10 @@ window.addEventListener("load", () => {
   const nb = document.getElementById("notify-btn");
   if (nb) { updateNotifyBtn(); nb.addEventListener("click", requestNotify); }
   refreshAll(true);
+  
+  // Pythia Quant UI events setup
+  setupQuantEvents();
+
   // 토스 보유 자산 — 60초 (LIVE 느낌)
   setInterval(refreshPortfolioOnly,    60 * 1000);
   // shield — 5분 (yfinance 일봉, 분 단위 변화 X)
@@ -1191,6 +1339,13 @@ window.addEventListener("pageshow", e => { if (e.persisted) onResume(); });
 
 document.addEventListener("keydown", e => {
   if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
-  if (e.key === "r" || e.key === "R") refreshAll(true);
+  if (e.key === "r" || e.key === "R") {
+    const quantBtn = document.getElementById("tab-quant-btn");
+    if (quantBtn && quantBtn.classList.contains("active")) {
+      loadQuantStatus();
+    } else {
+      refreshAll(true);
+    }
+  }
 });
 

@@ -55,8 +55,10 @@
         </svg>
       </span>
       <span>Stoa</span>
-      <span class="sep">·</span>
-      <span class="sub">동적 글라이드</span>
+    </div>
+    <div class="tab-container">
+      <button id="tab-dca-btn" class="tab-btn active" type="button">📊 DCA 포트폴리오</button>
+      <button id="tab-quant-btn" class="tab-btn" type="button">📈 Pythia 퀀트</button>
     </div>
     <div class="meta">
       <button id="settings-btn" class="notify-btn" type="button">⚙️ 설정</button>
@@ -93,7 +95,8 @@
     </div>
   </section>
 
-  <!-- ─── Hero · Shield status ────────────────────────── -->
+  <!-- ─── DCA Content Wrap ────────────────────────────── -->
+  <div id="dca-content">
   <section class="hero" id="hero">
     <div class="shield-orb" aria-hidden="true">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
@@ -244,6 +247,151 @@
       <div class="stress-foot">무방패 = 그냥 보유 · 방패ON = V5_Adv 현금대피. 합성·구간 최악치(절대수익 아님).</div>
     </div>
   </section>
+
+  </div> <!-- dca-content end -->
+
+  <!-- ─── Pythia Quant Content Wrap ────────────────────── -->
+  <div id="quant-content" style="display:none;">
+    
+    <!-- Hero (Polymarket status) -->
+    <section class="hero" style="background: radial-gradient(ellipse 90% 60% at 50% -10%, #1c152e 0%, #0b0c0f 60%);">
+      <div class="shield-orb active" style="color: var(--violet); border-color: rgba(196, 181, 253, 0.3);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+        </svg>
+      </div>
+      <div class="lede">
+        <div class="eyebrow" style="color: var(--violet)">Polymarket OOS Forward 검증</div>
+        <div class="headline" id="quant-oos-headline"><span class="accent" style="color: var(--violet)">300 마켓 락온 (T₂ Freeze)</span></div>
+        <div class="checks">
+          <div class="check"><span class="tick check-ok">✓</span>claude-opus-4-8 예측 완료</div>
+          <div class="check"><span class="tick check-ok">✓</span>git_witness_oos_forward_v1 서명 완료</div>
+        </div>
+      </div>
+      <div class="verdict" style="border-left: 1px solid rgba(196, 181, 253, 0.2);">
+        <div class="vlbl">평가 예정일 (T₃)</div>
+        <div class="vtxt" style="font-family: var(--font-mono); font-size: 1.1rem;">2026-06-29</div>
+        <div class="vhint">30일 룩백 후 해소 결과가 풀링됩니다.</div>
+      </div>
+    </section>
+
+    <!-- Metrics cards -->
+    <section class="grid grid-3">
+      
+      <!-- OOS 검증 현황 -->
+      <div class="card">
+        <div class="label">Polymarket 검증 <span class="badge" style="background:rgba(196, 181, 253, 0.1); color:var(--violet)">LIVE</span></div>
+        <div class="stat" id="q-stat-total">300 <span style="font-size:0.5em; color:var(--text-mute)">Markets</span></div>
+        
+        <div class="kv kv-hero" style="margin-top:20px;">
+          <span>해소 (Resolved)</span>
+          <span class="v" id="q-stat-resolved">0</span>
+        </div>
+        <div class="kv">
+          <span>대기 (Pending)</span>
+          <span class="v" id="q-stat-pending">300</span>
+        </div>
+        <div class="kv">
+          <span>최종 평가일 (UTC)</span>
+          <span class="v" style="font-family: var(--font-mono)">06-29 00:00</span>
+        </div>
+      </div>
+
+      <!-- 드라이런 검증 패널 -->
+      <div class="card">
+        <div class="label">드라이런 제어</div>
+        <div class="stat-desc" style="font-size: 0.85rem; color: var(--text-dim); margin-bottom: 20px;">
+          현재까지 해소된 마켓이 있는지 강제로 Polymarket API를 조회하여 조기 평가(Dry Run)를 수행합니다. (약 1~2분 소요)
+        </div>
+        <div class="set-actions" style="margin: 0;">
+          <button id="quant-run-eval-btn" type="button" class="set-btn primary" style="background: var(--violet); color: #0b0c0f; width: 100%;">조기 평가 실행</button>
+        </div>
+        <div class="kv" style="margin-top:15px;">
+          <span>상태</span>
+          <span class="v" id="quant-eval-status-text">대기 중</span>
+        </div>
+      </div>
+
+      <!-- Tier 1 퍼블리셔 이력 -->
+      <div class="card">
+        <div class="label">Tier 1 게시 증명 <span class="badge">IPFS / Nostr</span></div>
+        <div class="stat-desc" style="font-size: 0.85rem; color: var(--text-dim); margin-bottom: 12px;">
+          Nostr 및 IPFS(Pinata)에 게시 완료된 영속적 공개 예측 증명 파이프라인 작동 상태입니다.
+        </div>
+        <div class="kv" style="border-top:1px solid var(--hairline); padding-top:10px;">
+          <span>E2E 스모크 테스트</span>
+          <span class="chip ok"><span class="dot"></span>통과 (PASS)</span>
+        </div>
+        <div class="kv">
+          <span>Nostr 릴레이 전송</span>
+          <span class="v" style="color:var(--ok)">성공 (4개 릴레이)</span>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- 실시간 base-rate 계산기 -->
+    <section class="grid">
+      <div class="card">
+        <div class="label">주식 이벤트 base-rate 계산기 <span class="badge">DRAFT §2 도구</span></div>
+        <div class="stress-intro" style="margin-bottom: 16px;">
+          특정 기업 티커와 이벤트 종류를 입력하면, <strong>SEC EDGAR Submissions API</strong>로 과거 8-K 제출 이력을 조회하고 <strong>yfinance</strong> 주가와 매핑하여 <strong>과거 동동 이벤트 직후 주가 상승 확률(base-rate)</strong>을 실시간 계산합니다.
+        </div>
+        
+        <!-- Input Row -->
+        <div class="dca-input-row" style="margin-bottom:20px; display:flex; gap:16px; flex-wrap:wrap;">
+          <div style="flex: 1; min-width: 150px;">
+            <label for="quant-ticker-input">티커 (Ticker)</label>
+            <input id="quant-ticker-input" type="text" value="AAPL" style="width:100%; background:var(--surface-2); border:1px solid var(--border); color:var(--text); padding:8px 12px; border-radius:var(--r-sm);" />
+          </div>
+          <div style="flex: 1; min-width: 150px;">
+            <label for="quant-event-select">이벤트 종류</label>
+            <select id="quant-event-select" style="width:100%; background:var(--surface-2); border:1px solid var(--border); color:var(--text); padding:8px 12px; border-radius:var(--r-sm); height: 42px;">
+              <option value="2.02">8-K 2.02 (실적 공시)</option>
+              <option value="earnings">Earnings (어닝 발표 일정)</option>
+              <option value="1.01">8-K 1.01 (중요 계약)</option>
+              <option value="2.01">8-K 2.01 (인수/매각 완료)</option>
+              <option value="5.02">8-K 5.02 (임원 변동)</option>
+            </select>
+          </div>
+          <div style="display: flex; align-items: flex-end;">
+            <button id="quant-calc-btn" type="button" class="set-btn primary" style="background:var(--violet); color:#0b0c0f; height: 42px; padding: 0 24px;"> base-rate 계산 </button>
+          </div>
+        </div>
+
+        <!-- Result area -->
+        <div id="quant-calc-result" style="display:none; border-top:1px solid var(--hairline); padding-top:20px;">
+          <div class="grid grid-3" style="margin-top:0; padding:0;">
+            <div class="card" style="background:var(--surface-2); border:none; margin:0;">
+              <div class="label">결과 상승 확률 (base-rate)</div>
+              <div class="stat" id="q-calc-rate" style="color:var(--violet)">55.56%</div>
+            </div>
+            <div class="card" style="background:var(--surface-2); border:none; margin:0;">
+              <div class="label">분석 표본 개수 (N)</div>
+              <div class="stat" id="q-calc-n">45 건</div>
+            </div>
+            <div class="card" style="background:var(--surface-2); border:none; margin:0;">
+              <div class="label">폴백 여부</div>
+              <div class="stat" id="q-calc-fallback" style="font-size: 1.5rem; line-height: 2.2rem; font-weight: 500;">None</div>
+            </div>
+          </div>
+          <div class="kv" style="margin-top:15px; padding-left:10px;">
+            <span>샘플 분석 기간</span>
+            <span class="v" id="q-calc-period">—</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 드라이런 평가 실시간 로그 영역 -->
+    <section class="grid" id="quant-log-section" style="display:none;">
+      <div class="card">
+        <div class="label">드라이런 평가 실행 로그</div>
+        <pre id="quant-log-pre" style="background:#050608; border:1px solid var(--border); color:#4ADE80; font-family:var(--font-mono); font-size:0.85rem; padding:16px; border-radius:var(--r-md); overflow-x:auto; max-height:300px; margin-top:10px; white-space:pre-wrap;"></pre>
+      </div>
+    </section>
+
+  </div> <!-- quant-content end -->
 
   <!-- ─── Footer ───────────────────────────────────── -->
   <footer class="footnote">

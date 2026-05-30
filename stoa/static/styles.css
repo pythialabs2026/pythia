@@ -1796,3 +1796,46 @@ html[data-device="phone"] .meta { gap: 12px; padding-right: 44px; }
 @media (max-width: 720px) {
   .crisis-grid { grid-template-columns: 1fr; }
 }
+
+/* ── Tab Switcher Style ──────────────────────────────── */
+.tab-container {
+  display: flex;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  padding: 4px;
+  border-radius: var(--r-md);
+  gap: 4px;
+}
+.tab-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-mute);
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 6px 16px;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.tab-btn:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.05);
+}
+.tab-btn.active {
+  color: #0b0c0f;
+  background: var(--violet);
+  font-weight: 600;
+}
+
+/* Styling adjustments for Quant section */
+.check-ok {
+  color: var(--violet) !important;
+}
+pre {
+  margin: 0;
+}
+select:focus, input:focus {
+  outline: none;
+  border-color: var(--violet) !important;
+}
