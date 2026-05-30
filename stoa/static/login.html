@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0B0C0F">
+<title>Stoa · 로그인</title>
+<link rel="stylesheet" as="style" crossorigin
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="manifest" href="/static/manifest.json">
+<style>
+  :root { --bg:#0B0C0F; --surface:#15171C; --surface-2:#1d2026; --border:#2a2e37;
+          --text:#E8EAED; --text-dim:#8E95A2; --accent:#A7B5FF; --bad:#F87171; --ok:#4ADE80; }
+  * { box-sizing:border-box; }
+  body { margin:0; min-height:100vh; background:var(--bg); color:var(--text);
+         font-family:"Pretendard Variable",Pretendard,system-ui,sans-serif;
+         display:flex; align-items:center; justify-content:center; padding:24px; }
+  .box { width:100%; max-width:380px; }
+  .brand { display:flex; align-items:center; gap:8px; justify-content:center; margin-bottom:28px;
+           font-size:22px; font-weight:700; letter-spacing:-0.02em; }
+  .brand .glyph { color:var(--accent); display:flex; }
+  .brand .sub { color:var(--text-dim); font-weight:500; font-size:14px; }
+  .card { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:26px 24px; }
+  .tabs { display:flex; gap:6px; margin-bottom:20px; background:var(--surface-2); padding:4px; border-radius:10px; }
+  .tab { flex:1; text-align:center; padding:9px; border-radius:7px; font-size:14px; font-weight:600;
+         color:var(--text-dim); cursor:pointer; border:none; background:transparent; }
+  .tab.on { background:var(--accent); color:var(--bg); }
+  label { display:block; font-size:12px; color:var(--text-dim); margin:14px 0 6px; font-weight:500; }
+  input { width:100%; background:var(--surface-2); border:1px solid var(--border); border-radius:9px;
+          padding:12px 13px; color:var(--text); font-size:15px; outline:none; }
+  input:focus { border-color:var(--accent); }
+  .remember { display:flex; align-items:center; gap:7px; margin-top:14px; font-size:13px; color:var(--text-dim); }
+  .remember input { width:auto; }
+  button.submit { width:100%; margin-top:20px; background:var(--accent); color:var(--bg); border:none;
+                  border-radius:9px; padding:13px; font-size:15px; font-weight:700; cursor:pointer; }
+  button.submit:disabled { opacity:0.5; }
+  .msg { margin-top:14px; font-size:13px; min-height:18px; text-align:center; }
+  .msg.err { color:var(--bad); } .msg.ok { color:var(--ok); }
+  .note { margin-top:18px; font-size:11px; color:var(--text-dim); text-align:center; line-height:1.6; }
+</style>
+</head>
+<body>
+<div class="box">
+  <div class="brand">
+    <span class="glyph"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 20V8 M12 20V4 M20 20V12"/></svg></span>
+    Stoa <span class="sub">· 동적 글라이드</span>
+  </div>
+  <div class="card">
+    <div class="tabs">
+      <button class="tab on" id="tab-login" type="button">로그인</button>
+      <button class="tab" id="tab-signup" type="button">회원가입</button>
+    </div>
+    <form id="form">
+      <label for="email">이메일</label>
+      <input id="email" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com" />
+      <label for="pw">비밀번호</label>
+      <input id="pw" type="password" autocomplete="current-password" placeholder="8자 이상" />
+      <div id="invite-row" style="display:none;">
+        <label for="invite">초대코드</label>
+        <input id="invite" type="text" placeholder="가족·지인 초대코드" />
+      </div>
+      <div class="remember"><input id="remember" type="checkbox" checked /><label for="remember" style="margin:0;">자동 로그인 (60일)</label></div>
+      <button class="submit" id="submit" type="submit">로그인</button>
+      <div class="msg" id="msg"></div>
+    </form>
+    <div class="note">개인 투자 대시보드 · 가입 후 설정에서 토스 세션을 등록하면<br>본인 보유자산이 실시간으로 연동됩니다.</div>
+  </div>
+</div>
+<script>
+  let mode = "login";
+  const $ = s => document.querySelector(s);
+  function setMode(m) {
+    mode = m;
+    $("#tab-login").classList.toggle("on", m === "login");
+    $("#tab-signup").classList.toggle("on", m === "signup");
+    $("#submit").textContent = m === "login" ? "로그인" : "회원가입";
+    $("#pw").autocomplete = m === "login" ? "current-password" : "new-password";
+    $("#invite-row").style.display = m === "signup" ? "block" : "none";
+    $("#msg").textContent = "";
+  }
+  $("#tab-login").onclick = () => setMode("login");
+  $("#tab-signup").onclick = () => setMode("signup");
+  $("#form").addEventListener("submit", async e => {
+    e.preventDefault();
+    const email = $("#email").value.trim(), pw = $("#pw").value;
+    const remember = $("#remember").checked;
+    const invite = $("#invite").value.trim();
+    const msg = $("#msg"); msg.className = "msg"; msg.textContent = "처리 중…";
+    $("#submit").disabled = true;
+    try {
+      const r = await fetch(`/api/auth/${mode === "login" ? "login" : "signup"}`, {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password: pw, remember, invite }),
+      });
+      const d = await r.json();
+      if (d.ok) { msg.className = "msg ok"; msg.textContent = "완료 — 이동 중…"; location.href = "/"; }
+      else { msg.className = "msg err"; msg.textContent = d.why || "실패"; }
+    } catch (err) { msg.className = "msg err"; msg.textContent = "네트워크 오류"; }
+    $("#submit").disabled = false;
+  });
+</script>
+</body>
+</html>

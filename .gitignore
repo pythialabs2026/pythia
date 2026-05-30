@@ -1,17 +1,61 @@
-﻿# Pythia PC-side .gitignore
-data/raw_mirror/
-data/processed/
-data/features/
-data/models/
-data/backtest/
-data/llm_cache/
-logs/
+# Pythia .gitignore
+# 원칙: 코드만 git에. 데이터·로그·런타임 상태는 모두 git 밖.
+
+# ---- 데이터 (정본은 파일시스템 + manifest sha256) ----
+data/raw/
+data/predictions/pending/
+data/predictions/resolved/
+data/metrics/
+data/duckdb/
 *.parquet
-*.pkl
-*.joblib
 *.duckdb
+*.duckdb.wal
+
+# ledger·manifest는 git에 둘지 별도 결정 (지금은 제외, 백업은 rclone/cron)
+data/predictions/ledger.jsonl
+data/raw/_manifest.jsonl
+
+# ---- 런타임 상태 ----
+runtime/state/
+runtime/locks/
+runtime/tmp/
+
+# ---- 로그 ----
+logs/
+
+# ---- 시크릿 (이중 안전망 — 어차피 ~/.claude/shared/secrets/ 에 있음) ----
+*.env
+*_credentials.env
+*_token.env
+secrets/
+
+# ---- 파이썬 ----
 __pycache__/
 *.py[cod]
+*.egg-info/
 .venv/
 venv/
-.ipynb_checkpoints/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ---- 에디터·OS ----
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# ---- stoa ----
+stoa/stoa.db
+stoa/server.log
+stoa/master.key
+stoa/oracle.tailde4a99.ts.net.crt
+stoa/oracle.tailde4a99.ts.net.key
+stoa/push_keys.json
+stoa/push_subs.json
+
+# ---- ploy_quant ----
+ploy_quant/data/
+ploy_quant/runtime/
+ploy_quant/logs/
+ploy_quant/secrets/
