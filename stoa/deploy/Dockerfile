@@ -11,8 +11,9 @@ RUN pip install --no-cache-dir -r /app/requirements.txt
 COPY deploy/tossctl /usr/local/bin/tossctl
 RUN chmod +x /usr/local/bin/tossctl
 
-COPY webapp/ /app/webapp/
-COPY bots/   /app/bots/
+RUN mkdir -p /app/webapp /app/bots
+COPY app.py auth.py /app/webapp/
+COPY static/ /app/webapp/static/
 COPY deploy/entrypoint.sh /app/entrypoint.sh
 COPY deploy/crontab /etc/cron.d/stoa
 RUN chmod +x /app/entrypoint.sh && chmod 0644 /etc/cron.d/stoa
