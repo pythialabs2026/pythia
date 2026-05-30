@@ -1,0 +1,16 @@
+﻿# ploy_quant strategy config
+target_sport: soccer   # soccer | nba | both
+gate_net_roi: 0.05     # 5% net of fees
+taker_fee: 0.02        # Polymarket 2%
+walk_forward_seasons: 3
+min_edge: 0.03         # 최소 확률 엣지
+
+soccer:
+  leagues: [E0, SP1, D1, I1, F1]   # football-data.co.uk 코드
+  model: dixon_coles                # dixon_coles | xgboost | ensemble
+  elo_k: 32
+  xg_window: 10                     # 최근 N경기 xG 평균
+
+nba:
+  model: xgboost
+  injury_lookback_days: 3

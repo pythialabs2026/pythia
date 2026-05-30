@@ -1,0 +1,7 @@
+SHELL=/bin/bash
+PATH=/usr/local/bin:/usr/bin:/bin
+STOA_DATA=/data
+CRON_TZ=Asia/Seoul
+40 6 * * 1-5 root cd /app/bots && python3 v5_adv_bot.py --check >> /data/v5_adv_cron.log 2>&1
+45 6 * * 1 root cd /app/bots && python3 glide_rebalance_bot.py --check >> /data/glide_rebal_cron.log 2>&1
+50 6 * * 1-5 root cd /app/bots && python3 crisis_gauge_bot.py >> /data/crisis_gauge_cron.log 2>&1

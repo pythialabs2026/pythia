@@ -1,0 +1,13 @@
+﻿# ploy_quant runtime config
+env: paper          # paper | live
+log_level: INFO
+data_dir: data
+pc_compute: true    # 무거운 작업은 mcp__pc__pc_python 위임
+
+polymarket:
+  gamma_api: "https://gamma-api.polymarket.com"
+  clob_api: "https://clob.polymarket.com"
+  categories: [sports_intl, sports_us]
+
+notify:
+  telegram_enabled: false

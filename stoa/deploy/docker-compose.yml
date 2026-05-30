@@ -1,0 +1,16 @@
+services:
+  stoa:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    image: stoa:latest
+    container_name: stoa
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8765:8765"        # tailscale funnel → 127.0.0.1:8765 → 컨테이너
+    volumes:
+      - /home/ubuntu/runtime/state/stock-data:/data   # 영속: DB·키·설정·상태
+      - /home/ubuntu/.config/tossctl:/root/.config/tossctl:ro   # owner 토스세션 자동임포트(읽기전용)
+    environment:
+      - STOA_SIGNUP_CODE=stoa-0816
+      - TZ=Asia/Seoul

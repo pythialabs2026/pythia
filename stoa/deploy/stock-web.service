@@ -1,0 +1,18 @@
+[Unit]
+Description=Stoa stock dashboard (FastAPI :8765)
+After=network-online.target tailscaled.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/home/ubuntu/runtime/apps/stock/current/strategies/tqqq-dca/webapp
+Environment=PATH=/home/ubuntu/.local/bin:/home/ubuntu/bin:/home/ubuntu/.npm-global/bin:/home/ubuntu/.nvm/versions/node/v22.22.2/bin:/usr/local/bin:/usr/bin:/bin
+ExecStart=/usr/bin/python3 app.py
+Restart=always
+RestartSec=3
+StandardOutput=append:/home/ubuntu/runtime/logs/stock/web.log
+StandardError=append:/home/ubuntu/runtime/logs/stock/web.log
+
+[Install]
+WantedBy=multi-user.target

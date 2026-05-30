@@ -1,0 +1,13 @@
+{
+  "name": "Stoa · 7:3 포트폴리오",
+  "short_name": "Stoa",
+  "description": "동적 글라이드 + V5_Adv 방패 포트폴리오 모니터",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0B0C0F",
+  "theme_color": "#0B0C0F",
+  "icons": [
+    {"src": "/static/icon-192.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "/static/icon-512.png", "sizes": "512x512", "type": "image/png"}
+  ]
+}

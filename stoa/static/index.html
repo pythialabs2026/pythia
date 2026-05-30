@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0B0C0F">
+<title>Stoa · 동적 글라이드</title>
+
+<!-- 디바이스 클래스 자동인식 (UA 모델 스니핑 X — 뷰포트·입력방식·방향 기반).
+     paint 전에 <html data-device/orient/touch> 설정 → CSS가 기종별 자동 최적화 -->
+<script>
+(function () {
+  var d = document.documentElement;
+  function classify() {
+    var w = window.innerWidth, h = window.innerHeight;
+    var coarse = window.matchMedia("(pointer: coarse)").matches;
+    // 폼팩터 분류 (모델이 아닌 폭+입력방식). iPadOS는 데스크톱 UA를 보내므로 coarse로 태블릿 판별.
+    var device = w <= 600 ? "phone" : (w <= 1024 ? (coarse ? "tablet" : "desktop") : "desktop");
+    d.setAttribute("data-device", device);
+    d.setAttribute("data-orient", w >= h ? "landscape" : "portrait");
+    d.setAttribute("data-touch", coarse ? "1" : "0");
+  }
+  classify();
+  window.addEventListener("resize", classify, { passive: true });
+  window.addEventListener("orientationchange", classify, { passive: true });
+})();
+</script>
+
+<!-- Pretendard -->
+<link rel="stylesheet" as="style" crossorigin
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<!-- Newsreader (display serif for numbers) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,300;6..72,400;6..72,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<link rel="stylesheet" href="/static/styles.css?v=20">
+<!-- PWA (설치 + 알림) -->
+<link rel="manifest" href="/static/manifest.json">
+<link rel="apple-touch-icon" href="/static/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ─── Top bar ─────────────────────────────────────── -->
+  <header class="topbar">
+    <div class="brand">
+      <span class="glyph" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 20V8 M12 20V4 M20 20V12"/>
+        </svg>
+      </span>
+      <span>Stoa</span>
+      <span class="sep">·</span>
+      <span class="sub">동적 글라이드</span>
+    </div>
+    <div class="meta">
+      <button id="settings-btn" class="notify-btn" type="button">⚙️ 설정</button>
+      <button id="notify-btn" class="notify-btn" type="button">🔔 알림 켜기</button>
+      <span><span class="dot" id="live-dot" style="margin: 0px 6px 0px 0px"></span><span class="live-text" id="last-update" style="font-weight: 500">불러오는 중…</span></span>
+    </div>
+  </header>
+
+  <!-- ─── 설정 패널 (토스 등록 / 계정) ─────────────────── -->
+  <section class="grid" id="settings-panel" style="display:none;">
+    <div class="card">
+      <div class="label">설정 <span class="badge" id="acct-email">—</span></div>
+      <div class="set-block">
+        <div class="set-title">토스증권 연동 <span class="set-status" id="toss-status">확인 중…</span></div>
+        <div class="set-desc">본인 토스 세션을 등록하면 보유자산이 실시간 연동됩니다. <strong>읽기 전용</strong>(매매 기능 없음)·암호화 저장.</div>
+        <details class="set-how">
+          <summary>세션 얻는 방법</summary>
+          <ol>
+            <li>PC에서 <code>tossctl auth login</code> 실행 → 브라우저로 토스 로그인</li>
+            <li><code>cat ~/.config/tossctl/session.json</code> 내용 전체 복사</li>
+            <li>아래에 붙여넣고 등록</li>
+          </ol>
+        </details>
+        <textarea id="toss-input" class="set-textarea" placeholder='{"cookies":[...], ...}  ← session.json 전체'></textarea>
+        <div class="set-actions">
+          <button id="toss-save" type="button" class="set-btn primary">등록 / 갱신</button>
+          <button id="toss-del" type="button" class="set-btn">연동 해제</button>
+          <span class="set-msg" id="toss-msg"></span>
+        </div>
+      </div>
+      <div class="set-block">
+        <button id="logout-btn" type="button" class="set-btn">로그아웃</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Hero · Shield status ────────────────────────── -->
+  <section class="hero" id="hero">
+    <div class="shield-orb" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2 L20 5 V11 C20 16.5 16.5 20.5 12 22 C7.5 20.5 4 16.5 4 11 V5 Z"/>
+        <path d="M9 12 L11 14 L15 10"/>
+      </svg>
+    </div>
+    <div class="lede">
+      <div class="eyebrow" id="hero-eyebrow">자동 안전장치</div>
+      <div class="headline" id="hero-headline"><span class="accent">확인 중…</span></div>
+      <div class="checks" id="hero-checks">
+        <div class="check"><span class="tick"><span class="loading"></span></span>나스닥 추세 확인 중</div>
+        <div class="check"><span class="tick"><span class="loading"></span></span>공포지수 확인 중</div>
+      </div>
+    </div>
+    <div class="verdict" id="hero-verdict">
+      <div class="vlbl">권장 행동</div>
+      <div class="vtxt">—</div>
+      <div class="vhint">데이터를 불러오는 중입니다.</div>
+    </div>
+  </section>
+
+  <!-- ─── Key metrics row (3 카드만) ───────────────────── -->
+  <section class="grid grid-3">
+
+    <!-- 총 자산 -->
+    <div class="card">
+      <div class="label">총 자산 <span class="badge">토스증권 LIVE</span></div>
+      <div class="stat" id="total-krw"><span class="skel">₩0,000,000</span></div>
+      <div class="stat-sub" id="total-usd"><span class="skel">$0,000</span></div>
+      <!-- 원금 vs 평가수익 분리 (적립 동기) -->
+      <div class="pg-split">
+        <div class="pg-bar">
+          <div class="pg-principal" id="pg-bar-principal" style="width:80%"></div>
+          <div class="pg-gain" id="pg-bar-gain" style="width:20%"></div>
+        </div>
+        <div class="pg-legend">
+          <span><span class="pg-dot principal"></span>원금 <strong id="pg-principal">—</strong></span>
+          <span><span class="pg-dot gain"></span>수익 <strong id="pg-gain">—</strong></span>
+        </div>
+      </div>
+      <!-- 누적 손익 강조, 일간은 작게 (단기 노이즈 둔감) -->
+      <div class="kv kv-hero"><span>총 평가 손익 <span class="kv-rate" id="cum-rate"></span></span><span class="v" id="cum-pnl">—</span></div>
+      <div class="kv kv-muted"><span>오늘</span><span class="v" id="daily-pnl">—</span></div>
+    </div>
+
+    <!-- 현재 비중 (동적 글라이드) -->
+    <div class="card">
+      <div class="label">현재 비중 <span class="badge" id="glide-target-badge">동적 목표 —</span></div>
+      <div class="stat" style="font-size: clamp(28px, 3.2vw, 38px);">
+        <span id="ratio-qq">—</span>
+        <span style="color:var(--text-mute);font-size:0.6em;margin:0 4px;">/</span>
+        <span id="ratio-tq" style="color:var(--violet);">—</span>
+      </div>
+      <div class="alloc-stack">
+        <div class="seg-stable" id="seg-stable" style="width:70%"></div>
+        <div class="seg-aggro"  id="seg-aggro"  style="width:30%"></div>
+        <div class="target-mark" id="glide-target-mark" data-target-label="목표 —" style="left:62%"></div>
+      </div>
+      <div class="alloc-legend">
+        <span class="left"><span class="swatch sw-stable"></span>안정 <strong id="leg-q">QQQM</strong></span>
+        <span class="right">공격 <strong id="leg-t">TQQQ</strong> <span class="swatch sw-aggro"></span></span>
+      </div>
+      <!-- 다음달 투자 예정액 입력 → 글라이드 실시간 재계산 -->
+      <div class="dca-input-row">
+        <label for="dca-input">다음달 투자 예정</label>
+        <div class="dca-field">
+          <span class="dca-won">₩</span>
+          <input id="dca-input" type="text" inputmode="numeric" value="100,000" />
+          <button id="dca-save" type="button">적용</button>
+        </div>
+      </div>
+      <div class="kv" style="margin-top:14px;">
+        <span>현재 레버리지</span>
+        <span class="v" id="cur-lev">—</span>
+      </div>
+      <div class="kv">
+        <span>글라이드 목표 (r=<span id="glide-r">—</span>)</span>
+        <span class="v" id="target-lev">—</span>
+      </div>
+      <div class="kv">
+        <span>리밸런싱 신호</span>
+        <span class="chip ok" id="drift-chip"><span class="dot"></span>확인 중</span>
+      </div>
+      <!-- 구체적 지정가 주문 (리밸 필요시만 표시) -->
+      <div class="order-box" id="order-box" style="display:none;">
+        <div class="order-title">📋 매수/매도 주문 (토스 입력)</div>
+        <div id="order-list"></div>
+        <div class="order-hint">정규장(KST 22:30~05:00)엔 <strong>시장가</strong>로 즉시 체결(TQQQ·QQQM 스프레드 거의 0) · 평일 시간외엔 지정가 권장 · <strong>주말은 전면 휴장</strong>(시간외 없음) → 월요일 정규장 시장가</div>
+      </div>
+    </div>
+
+    <!-- 다음 분기 점검 카운트다운 -->
+    <div class="card">
+      <div class="label">다음 분기 점검</div>
+      <div class="count-row">
+        <div class="count-day"><span class="d-prefix">D-</span><span id="count-days">—</span></div>
+        <div class="count-target">
+          <span>예정일</span>
+          <span class="date" id="count-date">—</span>
+        </div>
+      </div>
+      <div class="count-track"><div class="fill" id="count-fill" style="width:0%"></div></div>
+      <div class="count-hint">매월 글라이드 목표 비중을 자동 점검합니다(드리프트 ±5%p 초과 시 알림). 분기 말은 정기 점검일입니다.</div>
+    </div>
+
+  </section>
+
+  <!-- ─── Equity chart (Apple Stocks-style inline tooltip) ─── -->
+  <section class="grid">
+    <div class="card chart-card">
+      <div class="chart-head">
+        <div class="label" style="margin-bottom:0;">최근 1년 수익률
+          <span class="badge">시작 100 기준</span>
+        </div>
+        <div class="chart-cursor-label" id="chart-cursor-date">최근 12개월</div>
+      </div>
+
+      <div class="chart-wrap"><canvas id="chart-equity"></canvas></div>
+
+      <div class="chart-summary">
+        <div class="item primary">
+          <div class="l"><span class="dotline primary"></span>내 동적 글라이드</div>
+          <div class="v" id="sum-blend">—</div>
+        </div>
+        <div class="item tqqq">
+          <div class="l"><span class="dotline tqqq"></span>TQQQ (3배)</div>
+          <div class="v" id="sum-tqqq">—</div>
+        </div>
+        <div class="item qqq">
+          <div class="l"><span class="dotline qqq"></span>나스닥 (1배)</div>
+          <div class="v" id="sum-qqq">—</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── 스트레스 테스트 (과거 폭락 시 내 포트폴리오 — 패닉셀 예방) ─── -->
+  <section class="grid">
+    <div class="card stress-card">
+      <div class="label">하락장 스트레스 테스트
+        <span class="badge" id="stress-lev">현재 레버리지</span>
+      </div>
+      <div class="stress-intro">현재 비중으로 과거 폭락장을 겪었다면 — <strong>이 낙폭은 입장료다.</strong> 방패가 있어도 -50%대는 온다.</div>
+      <div class="stress-rows" id="stress-rows">
+        <div class="stress-loading">계산 중…</div>
+      </div>
+      <div class="stress-foot">무방패 = 그냥 보유 · 방패ON = V5_Adv 현금대피. 합성·구간 최악치(절대수익 아님).</div>
+    </div>
+  </section>
+
+  <!-- ─── Footer ───────────────────────────────────── -->
+  <footer class="footnote">
+    <div class="src">
+      <span class="ft-lbl">데이터</span>
+      <span class="ft-val">토스증권 <span class="ft-sub">보유</span></span>
+      <span class="ft-dot">·</span>
+      <span class="ft-val">야후파이낸스 <span class="ft-sub">시세</span></span>
+    </div>
+    <div class="kbds">
+      <span class="ft-lbl">자동 갱신</span>
+      <span class="ft-val">자산 <span class="ft-sub">1분</span></span>
+      <span class="ft-dot">·</span>
+      <span class="ft-val">방패 <span class="ft-sub">5분</span></span>
+      <span class="ft-dot">·</span>
+      <span class="ft-val">시세 <span class="ft-sub">1시간</span></span>
+      <span class="ft-dot">·</span>
+      <kbd>R</kbd> <span class="ft-val">즉시</span>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  // 프로덕션: 항상 LIVE 모드 (/api/* 호출)
+  window.__FORCE_LIVE__ = true;
+</script>
+<script src="/static/app.js?v=20"></script>
+<script>
+window.__TWEAK_DEFAULTS__ = /*EDITMODE-BEGIN*/{
+  "mood": "pro",
+  "numfont": "serif",
+  "accent": "amber"
+}/*EDITMODE-END*/;
+</script>
+<script src="/static/tweaks.js?v=16"></script>
+</body>
+</html>
